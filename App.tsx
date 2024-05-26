@@ -1,6 +1,6 @@
 import 'react-native-gesture-handler';
 import * as React from 'react';
-import { Button, View, StyleSheet } from 'react-native';
+import { Button, View, StyleSheet, AppRegistry } from 'react-native';
 import { DarkTheme } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createDrawerNavigator } from '@react-navigation/drawer';

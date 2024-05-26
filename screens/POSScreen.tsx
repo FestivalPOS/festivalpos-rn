@@ -5,7 +5,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Colors } from '../constants/Colors';
 
 const { width, height } = Dimensions.get('window');
-const maxTileSize = Math.min(width / 5, height / 3, 150);
+const maxTileSize = Math.min(width / 4, height / 3, 200);
 
 const POSScreen = ({ navigation }) => {
   const [products, setProducts] = useState([]);

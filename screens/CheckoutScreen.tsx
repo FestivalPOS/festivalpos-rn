@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, TextInput, Modal, Dimensions } from 'react-native';
 import { Colors } from '../constants/Colors';
 
@@ -11,6 +11,8 @@ const CheckoutScreen = ({ route, navigation }) => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [givenAmount, setGivenAmount] = useState('');
   const [change, setChange] = useState(null);
+
+  const amountInput = useRef();
 
   const calculateTotal = () => {
     return Object.keys(cart).reduce((sum, productId) => {
@@ -68,7 +70,10 @@ const CheckoutScreen = ({ route, navigation }) => {
       <View style={styles.buttonContainer}>
         {selectedPayment === null ? (
           <>
-            <TouchableOpacity style={styles.paymentButton} onPress={() => handlePayment('Twint')}>
+            <TouchableOpacity style={styles.finishButton} onPress={handleFinish}>
+              <Text style={styles.paymentButtonText}>Abschliessen</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.paymentButtonInactive} onPress={() => handlePayment('Twint')} disabled={true}>
               <Text style={styles.paymentButtonText}>Twint</Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.paymentButton} onPress={() => handlePayment('Bar')}>
@@ -81,7 +86,7 @@ const CheckoutScreen = ({ route, navigation }) => {
           </TouchableOpacity>
         )}
       </View>
-      <Modal visible={isModalVisible} transparent animationType="slide">
+      <Modal visible={isModalVisible} transparent animationType="slide" onRequestClose={() => {setIsModalVisible(false)}} onShow={() => {setTimeout(() => {amountInput.current.focus()},100)}}>
         <View style={styles.modalContainer}>
           <View style={styles.modalContent}>
             <Text style={styles.modalTitle}>Erhaltenen Betrag eingeben</Text>
@@ -92,6 +97,8 @@ const CheckoutScreen = ({ route, navigation }) => {
               placeholderTextColor={Colors.text}
               value={givenAmount}
               onChangeText={setGivenAmount}
+              autoFocus={false}
+              ref={amountInput}
             />
             <TouchableOpacity style={styles.calculateButton} onPress={handleCalculateChange}>
               <Text style={styles.calculateButtonText}>Wechselgeld berechnen</Text>
@@ -165,6 +172,16 @@ const styles = StyleSheet.create({
     margin: 4,
     borderWidth: 1,
     borderColor: Colors.text,
+    borderRadius: 4,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  paymentButtonInactive: {
+    flex: 1,
+    padding: 12,
+    margin: 4,
+    borderWidth: 1,
+    borderColor: '#333333',
     borderRadius: 4,
     alignItems: 'center',
     justifyContent: 'center',
