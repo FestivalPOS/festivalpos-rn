@@ -1,16 +1,7 @@
-// services/api.js
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as FileSystem from 'expo-file-system';
 
-const exampleProducts : Product[] = [
-  { id: 1, name: 'Beer', price: 5.00},
-  { id: 2, name: 'Soft Drink', price: 2.50 },
-  { id: 3, name: 'Water', price: 1.00 },
-  { id: 4, name: 'Wine', price: 7.50 },
-  { id: 99, name: 'Depot', price: -2.00 },
-];
-
-const downloadImage = async (url:string) => {
+const downloadImage = async (url) => {
   const filename = url.split('/').pop();
   const path = `${FileSystem.documentDirectory}${filename}`;
   const { exists } = await FileSystem.getInfoAsync(path);
@@ -22,19 +13,24 @@ const downloadImage = async (url:string) => {
 
 export const fetchProducts = async () => {
   try {
-    // Simulate network delay
-    await new Promise(resolve => setTimeout(resolve, 500));
-    const products = await Promise.all(exampleProducts.map(async (product) => {
+    const savedUrl = await AsyncStorage.getItem('productUrl');
+    const response = await fetch(savedUrl); // Fetch data from the saved URL
+    const products = await response.json(); // Parse response as JSON
+    // Process products and download images
+    const processedProducts = await Promise.all(products.map(async (product) => {
       if (product.imageURL) {
         const localImage = await downloadImage(product.imageURL);
         return { ...product, imageLocal: localImage };
       }
       return product;
     }));
-    await AsyncStorage.setItem('products', JSON.stringify(products));
-    return products;
+    // Save products to AsyncStorage
+    await AsyncStorage.setItem('products', JSON.stringify(processedProducts));
+    console.log(processedProducts)
+    return processedProducts;
   } catch (error) {
-    const products = await AsyncStorage.getItem('products');
-    return products ? JSON.parse(products) : [];
+    console.error('Error fetching products:', error);
+    // Handle error and return empty array
+    return [];
   }
 };

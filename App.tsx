@@ -5,6 +5,7 @@ import { DarkTheme } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { NavigationContainer } from '@react-navigation/native';
+import { CartProvider } from './helpers/CartContext';
 
 
 // Screens
@@ -28,6 +29,7 @@ const DrawerNavigator = () => {
 
 export default function App() {
   return (
+    <CartProvider>
     <NavigationContainer theme={DarkTheme}>
         <RootStack.Navigator screenOptions={{ presentation: 'modal' }}>
             <RootStack.Screen
@@ -38,5 +40,6 @@ export default function App() {
             <RootStack.Screen name="Checkout" component={CheckoutScreen} />
         </RootStack.Navigator>
     </NavigationContainer>
+    </CartProvider>
   );
 }

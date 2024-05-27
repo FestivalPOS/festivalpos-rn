@@ -1,11 +1,13 @@
-import React, { useRef, useState } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, TextInput, Modal, Dimensions } from 'react-native';
+import React, { useRef, useState, useEffect } from 'react';
+import { View, Text, Pressable, StyleSheet, TextInput, Modal, Dimensions } from 'react-native';
 import { Colors } from '../constants/Colors';
+import { useCart } from '../helpers/CartContext';
 
 const { width } = Dimensions.get('window');
 
 const CheckoutScreen = ({ route, navigation }) => {
-  const { cart, products, resetCart } = route.params;
+  const { cart, resetCart } = useCart();
+  const { products } = route.params;
 
   const [selectedPayment, setSelectedPayment] = useState(null);
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -16,7 +18,7 @@ const CheckoutScreen = ({ route, navigation }) => {
 
   const calculateTotal = () => {
     return Object.keys(cart).reduce((sum, productId) => {
-      const product = products.find((p) => p.id === parseInt(productId, 10));
+      const product = products.find((p) => p.id === productId); // UUID is a string
       return sum + (product.price * cart[productId]);
     }, 0);
   };
@@ -48,7 +50,7 @@ const CheckoutScreen = ({ route, navigation }) => {
     <View style={styles.container}>
       <View style={styles.summary}>
         {Object.keys(cart).map(productId => {
-          const product = products.find(p => p.id === parseInt(productId, 10));
+          const product = products.find(p => p.id === productId); // UUID is a string
           return (
             <View key={product.id} style={styles.productItem}>
               <Text style={styles.productText}>{cart[productId]} x {product.name}</Text>
@@ -57,42 +59,42 @@ const CheckoutScreen = ({ route, navigation }) => {
           );
         })}
         <View style={styles.totalRow}>
-            <Text style={styles.totalText}>Total:</Text>
-            <Text style={styles.totalAmount}>CHF {total}</Text>
+          <Text style={styles.totalText}>Total:</Text>
+          <Text style={styles.totalAmount}>CHF {total}</Text>
         </View>
         {change !== null && (
-            <View style={styles.productItem}>
-                <Text style={styles.changeText}>Wechselgeld:</Text>
-                <Text style={styles.changeAmount}>CHF {change}</Text>
-            </View>
+          <View style={styles.productItem}>
+            <Text style={styles.changeText}>Wechselgeld:</Text>
+            <Text style={styles.changeAmount}>CHF {change}</Text>
+          </View>
         )}
       </View>
       <View style={styles.buttonContainer}>
         {selectedPayment === null ? (
           <>
-            <TouchableOpacity style={styles.finishButton} onPress={handleFinish}>
+            <Pressable style={styles.finishButton} onPress={handleFinish}>
               <Text style={styles.paymentButtonText}>Abschliessen</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.paymentButtonInactive} onPress={() => handlePayment('Twint')} disabled={true}>
+            </Pressable>
+            <Pressable style={styles.paymentButtonInactive} onPress={() => handlePayment('Twint')} disabled={true}>
               <Text style={styles.paymentButtonText}>Twint</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.paymentButton} onPress={() => handlePayment('Bar')}>
+            </Pressable>
+            <Pressable style={styles.paymentButton} onPress={() => handlePayment('Bar')}>
               <Text style={styles.paymentButtonText}>Bar</Text>
-            </TouchableOpacity>
+            </Pressable>
           </>
         ) : (
-          <TouchableOpacity style={styles.finishButton} onPress={handleFinish}>
+          <Pressable style={styles.finishButton} onPress={handleFinish}>
             <Text style={styles.paymentButtonText}>Abschliessen</Text>
-          </TouchableOpacity>
+          </Pressable>
         )}
       </View>
-      <Modal visible={isModalVisible} transparent animationType="slide" onRequestClose={() => {setIsModalVisible(false)}} onShow={() => {setTimeout(() => {amountInput.current.focus()},100)}}>
+      <Modal visible={isModalVisible} transparent animationType="slide" onRequestClose={() => { setIsModalVisible(false) }} onShow={() => { setTimeout(() => { amountInput.current.focus() }, 100) }}>
         <View style={styles.modalContainer}>
           <View style={styles.modalContent}>
             <Text style={styles.modalTitle}>Erhaltenen Betrag eingeben</Text>
             <TextInput
               style={styles.input}
-              keyboardType="numeric"
+              inputMode="numeric"
               placeholder="CHF"
               placeholderTextColor={Colors.text}
               value={givenAmount}
@@ -100,9 +102,9 @@ const CheckoutScreen = ({ route, navigation }) => {
               autoFocus={false}
               ref={amountInput}
             />
-            <TouchableOpacity style={styles.calculateButton} onPress={handleCalculateChange}>
+            <Pressable style={styles.calculateButton} onPress={handleCalculateChange}>
               <Text style={styles.calculateButtonText}>Wechselgeld berechnen</Text>
-            </TouchableOpacity>
+            </Pressable>
           </View>
         </View>
       </Modal>

@@ -1,25 +1,44 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, Dimensions, Image, ScrollView } from 'react-native';
-import { fetchProducts } from '../services/api'; // Ensure you have the fetchProducts function in your services
+import { View, Text, Pressable, StyleSheet, Dimensions, Image, ScrollView, ActivityIndicator } from 'react-native';
+import { fetchProducts } from '../services/api';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Colors } from '../constants/Colors';
+import { useCart } from '../helpers/CartContext';
 
 const { width, height } = Dimensions.get('window');
 const maxTileSize = Math.min(width / 4, height / 3, 200);
 
 const POSScreen = ({ navigation }) => {
+  const { cart, setCart, resetCart } = useCart();
   const [products, setProducts] = useState([]);
-  const [cart, setCart] = useState({});
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const loadProducts = async () => {
-      const products = await fetchProducts();
-      setProducts(products);
-    };
-    loadProducts();
-  }, []);
+    const unsubscribe = navigation.addListener('focus', () => {
+      loadProducts();
+    });
 
-  const addToCart = (product:Product) => {
+    return unsubscribe;
+  }, [navigation]);
+
+  const loadProducts = async () => {
+    setLoading(true);
+    try {
+      const savedUrl = await AsyncStorage.getItem('productUrl');
+      if (savedUrl) {
+        const products = await fetchProducts();
+        setProducts(products.sort((a, b) => a.order - b.order)); // Sort products by order
+      } else {
+        navigation.navigate('Settings');
+      }
+    } catch (error) {
+      console.error('Error loading products:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const addToCart = (product) => {
     setCart((prevCart) => {
       const count = prevCart[product.id] ? prevCart[product.id] + 1 : 1;
       return { ...prevCart, [product.id]: count };
@@ -38,45 +57,64 @@ const POSScreen = ({ navigation }) => {
     });
   };
 
-  const resetCart = () => {
-    setCart({});
-  };
-
   const calculateTotal = () => {
     return Object.keys(cart).reduce((sum, productId) => {
-      const product = products.find((p) => p.id === parseInt(productId, 10));
-      return sum + (product.price * cart[productId]);
+      const product = products.find((p) => p.id === productId);
+      return sum + ((product?.price ?? 0) * cart[productId]);
     }, 0);
   };
 
   return (
     <View style={styles.container}>
-      <ScrollView contentContainerStyle={styles.productContainer}>
-        {products.map((item) => (
-          <View style={styles.productItem} key={item.id}>
-            <TouchableOpacity onPress={() => addToCart(item)} style={styles.productSquare}>
-              {item.imageLocal && <Image source={{ uri: item.imageLocal }} style={styles.productImage} />}
-              <Text style={[styles.text, styles.productText]}>{item.name}{"\n"}CHF {item.price.toFixed(2)}</Text>
-              {cart[item.id] > 0 && (
-                <TouchableOpacity style={styles.itemCountCircle} onPress={() => removeFromCart(item.id)}>
-                  <Text style={styles.itemCountText}>{cart[item.id]}</Text>
-                </TouchableOpacity>
-              )}
-            </TouchableOpacity>
-          </View>
-        ))}
-      </ScrollView>
+      {loading ? (
+        <ActivityIndicator size="large" color={Colors.icon} />
+      ) : products.length > 0 ? (
+        <ScrollView contentContainerStyle={styles.productContainer}>
+          {products.map((item) => (
+            <View style={styles.productItem} key={item.id}>
+              <Pressable onPress={() => addToCart(item)} style={[styles.productSquare, { backgroundColor: item.tilecolor }]}>
+                {item.imageLocal && (
+                  <Image
+                    source={{ uri: item.imageLocal }}
+                    style={styles.productImage}
+                    resizeMode="contain"
+                  />
+                )}
+                <Text style={[styles.text, styles.productText]}>
+                  {item.name}{"\n"}CHF {parseFloat(item.price).toFixed(2)}
+                </Text>
+                {cart[item.id] > 0 && (
+                  <Pressable
+                    style={styles.itemCountCircle}
+                    onPress={() => removeFromCart(item.id)}
+                  >
+                    <Text style={styles.itemCountText}>{cart[item.id]}</Text>
+                  </Pressable>
+                )}
+              </Pressable>
+            </View>
+          ))}
+        </ScrollView>
+      ) : (
+        <Text style={styles.noProductsText}>No products available</Text>
+      )}
       <View style={styles.cartSummary}>
         <Text style={styles.cartTotal}>Total: CHF {calculateTotal().toFixed(2)}</Text>
-
-        <TouchableOpacity
-          style={(Object.keys(cart).length == 0) ? styles.checkoutButtonInactive : styles.checkoutButton}
-          onPress={() => navigation.navigate('Checkout', { cart, products, resetCart })}
-          disabled={(Object.keys(cart).length == 0)}
+        <Pressable
+          style={
+            Object.keys(cart).length === 0
+              ? styles.checkoutButtonInactive
+              : styles.checkoutButton
+          }
+          onPress={() => navigation.navigate('Checkout', { products })}
+          disabled={Object.keys(cart).length === 0}
         >
-          <Image style={styles.checkoutIcon} source={require('../assets/buyer_pay_icon.png')}></Image>
+          <Image
+            style={styles.checkoutIcon}
+            source={require('../assets/buyer_pay_icon.png')}
+          />
           <Text style={styles.checkoutButtonText}>Einkassieren</Text>
-        </TouchableOpacity>
+        </Pressable>
       </View>
     </View>
   );
@@ -87,16 +125,16 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 8,
     color: Colors.text,
-    backgroundColor: Colors.background
+    backgroundColor: Colors.background,
   },
   text: {
-    color: Colors.text
+    color: Colors.text,
   },
   productContainer: {
     flexDirection: 'row',
     flexWrap: 'wrap',
     justifyContent: 'space-between',
-    padding: 12
+    padding: 12,
   },
   productItem: {
     width: maxTileSize,
@@ -112,12 +150,11 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     position: 'relative',
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   productImage: {
     width: maxTileSize - 32,
     height: maxTileSize - 64,
-    resizeMode: 'contain',
     marginBottom: 8,
   },
   productText: {
@@ -138,6 +175,12 @@ const styles = StyleSheet.create({
   itemCountText: {
     color: '#fff',
     fontWeight: 'bold',
+  },
+  noProductsText: {
+    textAlign: 'center',
+    fontSize: 18,
+    color: Colors.text,
+    marginTop: 20,
   },
   cartSummary: {
     flexDirection: 'row',
@@ -179,9 +222,7 @@ const styles = StyleSheet.create({
   checkoutIcon: {
     height: 30,
     width: 20,
-    resizeMode: 'center'
-  }
+  },
 });
-
 
 export default POSScreen;
