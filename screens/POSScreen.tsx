@@ -3,40 +3,30 @@ import { View, Text, Pressable, StyleSheet, Dimensions, Image, ScrollView, Activ
 import { fetchProducts } from '../services/api';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Colors } from '../constants/Colors';
-import { useCart } from '../helpers/CartContext';
+import { useCart } from '../contexts/Cart.context';
+import { useTranslation } from 'react-i18next';
+import i18next from 'i18next';
 
 const { width, height } = Dimensions.get('window');
 const maxTileSize = Math.min(width / 4, height / 3, 200);
 
 const POSScreen = ({ navigation }) => {
-  const { cart, setCart, resetCart } = useCart();
+  const { cart, setCart } = useCart();
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
+  
+  const { t } = useTranslation();
 
   useEffect(() => {
-    const unsubscribe = navigation.addListener('focus', () => {
-      loadProducts();
-    });
-
-    return unsubscribe;
-  }, [navigation]);
-
-  const loadProducts = async () => {
-    setLoading(true);
-    try {
-      const savedUrl = await AsyncStorage.getItem('productUrl');
-      if (savedUrl) {
-        const products = await fetchProducts();
-        setProducts(products.sort((a, b) => a.order - b.order)); // Sort products by order
-      } else {
-        navigation.navigate('Settings');
-      }
-    } catch (error) {
-      console.error('Error loading products:', error);
-    } finally {
+    const initProducts = async () => {
+      setLoading(true);
+      const products = await fetchProducts();
+      setProducts(products.sort((a, b) => a.order - b.order));
       setLoading(false);
-    }
-  };
+    };
+  
+    initProducts();
+  }, []);
 
   const addToCart = (product) => {
     setCart((prevCart) => {
@@ -67,19 +57,22 @@ const POSScreen = ({ navigation }) => {
   return (
     <View style={styles.container}>
       {loading ? (
-        <ActivityIndicator size="large" color={Colors.icon} />
+        <View style={styles.activityIndicator}>
+          <ActivityIndicator size="large" color={Colors.icon} />
+        </View>
       ) : products.length > 0 ? (
         <ScrollView contentContainerStyle={styles.productContainer}>
           {products.map((item) => (
             <View style={styles.productItem} key={item.id}>
               <Pressable onPress={() => addToCart(item)} style={[styles.productSquare, { backgroundColor: item.tilecolor }]}>
+                
                 {item.imageLocal && (
                   <Image
                     source={{ uri: item.imageLocal }}
                     style={styles.productImage}
-                    resizeMode="contain"
                   />
                 )}
+                
                 <Text style={[styles.text, styles.productText]}>
                   {item.name}{"\n"}CHF {parseFloat(item.price).toFixed(2)}
                 </Text>
@@ -96,7 +89,7 @@ const POSScreen = ({ navigation }) => {
           ))}
         </ScrollView>
       ) : (
-        <Text style={styles.noProductsText}>No products available</Text>
+        <Text style={styles.noProductsText}>{t('pos_screen.no_products_available')}</Text>
       )}
       <View style={styles.cartSummary}>
         <Text style={styles.cartTotal}>Total: CHF {calculateTotal().toFixed(2)}</Text>
@@ -129,6 +122,9 @@ const styles = StyleSheet.create({
   },
   text: {
     color: Colors.text,
+  },
+  activityIndicator: {
+    marginVertical: 20,
   },
   productContainer: {
     flexDirection: 'row',
@@ -181,6 +177,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     color: Colors.text,
     marginTop: 20,
+    marginBottom: 20,
   },
   cartSummary: {
     flexDirection: 'row',

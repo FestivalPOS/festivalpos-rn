@@ -1,12 +1,12 @@
 import 'react-native-gesture-handler';
 import * as React from 'react';
-import { Button, View, StyleSheet, AppRegistry } from 'react-native';
+import './localization/i18n';
 import { DarkTheme } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { NavigationContainer } from '@react-navigation/native';
-import { CartProvider } from './helpers/CartContext';
-
+import ContextProvider from './contexts/ContextProvider';
+import Toast from 'react-native-toast-message';
 
 // Screens
 import POSScreen from './screens/POSScreen';
@@ -29,17 +29,18 @@ const DrawerNavigator = () => {
 
 export default function App() {
   return (
-    <CartProvider>
-    <NavigationContainer theme={DarkTheme}>
-        <RootStack.Navigator screenOptions={{ presentation: 'modal' }}>
-            <RootStack.Screen
-                name="Main"
-                component={DrawerNavigator}
-                options={{ headerShown: false }}
-            />
-            <RootStack.Screen name="Checkout" component={CheckoutScreen} />
-        </RootStack.Navigator>
-    </NavigationContainer>
-    </CartProvider>
+    <ContextProvider>
+      <NavigationContainer theme={DarkTheme}>
+          <RootStack.Navigator screenOptions={{ presentation: 'modal' }}>
+              <RootStack.Screen
+                  name="Main"
+                  component={DrawerNavigator}
+                  options={{ headerShown: false }}
+              />
+              <RootStack.Screen name="Checkout" component={CheckoutScreen} />
+          </RootStack.Navigator>
+          <Toast />
+      </NavigationContainer>
+    </ContextProvider>
   );
 }

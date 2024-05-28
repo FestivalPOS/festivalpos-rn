@@ -1,18 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import { View, TextInput, Modal, StyleSheet, Pressable, Text } from 'react-native';
-import { Snackbar } from 'react-native-paper';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { fetchProducts } from '../services/api';
+import { fetchProducts, refreshProducts } from '../services/api';
 import { Camera, CameraView } from 'expo-camera';
 
 import { Colors } from '../constants/Colors';
+import Toast from 'react-native-toast-message';
 
 const SettingsScreen = ({ navigation }) => {
   const [url, setUrl] = useState('');
   const [hasPermission, setHasPermission] = useState(null);
   const [isScannerOpen, setIsScannerOpen] = useState(false);
-  const [snackbarVisible, setSnackbarVisible] = useState(false);
-  const [snackbarMessage, setSnackbarMessage] = useState('');
+  const setLoading = useState(false);
 
   useEffect(() => {
     loadUrl();
@@ -33,23 +32,27 @@ const SettingsScreen = ({ navigation }) => {
 
   const saveUrl = async () => {
     await AsyncStorage.setItem('productUrl', url);
-    showSnackbar('URL saved successfully');
+    Toast.show({
+      type: 'success',
+      text1: 'POS saved successfully',
+      position: 'bottom'
+    })
   };
 
   const fetchNewData = async () => {
-    const products = await fetchProducts();
+    const products = await refreshProducts();
     navigation.navigate('POS', { products });
   };
 
   const handleBarCodeScanned = (data) => {
     setUrl(data.data);
     setIsScannerOpen(false);
-    showSnackbar('Scan successful! URL has been set.');
-  };
-
-  const showSnackbar = (message) => {
-    setSnackbarMessage(message);
-    setSnackbarVisible(true);
+    Toast.show({
+      type: 'success',
+      text1: 'Scan successfull!',
+      text2: 'POS has been set.',
+      position: 'bottom'
+    })
   };
 
   return (
@@ -105,19 +108,6 @@ const SettingsScreen = ({ navigation }) => {
           </View>
         </Modal>
       )}
-
-      <Snackbar
-        visible={snackbarVisible}
-        onDismiss={() => setSnackbarVisible(false)}
-        action={{
-          label: 'OK',
-          onPress: () => {
-            // Handle action here (optional)
-          },
-        }}
-        duration={Snackbar.DURATION_SHORT}>
-        {snackbarMessage}
-      </Snackbar>
     </View>
   );
 };

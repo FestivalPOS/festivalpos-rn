@@ -1,7 +1,7 @@
-import React, { useRef, useState, useEffect } from 'react';
+import React, { useRef, useState, useEffect, MutableRefObject } from 'react';
 import { View, Text, Pressable, StyleSheet, TextInput, Modal, Dimensions } from 'react-native';
 import { Colors } from '../constants/Colors';
-import { useCart } from '../helpers/CartContext';
+import { useCart } from '../contexts/Cart.context';
 
 const { width } = Dimensions.get('window');
 
@@ -14,11 +14,11 @@ const CheckoutScreen = ({ route, navigation }) => {
   const [givenAmount, setGivenAmount] = useState('');
   const [change, setChange] = useState(null);
 
-  const amountInput = useRef();
+  const amountInput: MutableRefObject<TextInput | null> = useRef<TextInput>(null);
 
   const calculateTotal = () => {
     return Object.keys(cart).reduce((sum, productId) => {
-      const product = products.find((p) => p.id === productId); // UUID is a string
+      const product = products.find((p) => p.id === productId);
       return sum + (product.price * cart[productId]);
     }, 0);
   };
@@ -50,7 +50,7 @@ const CheckoutScreen = ({ route, navigation }) => {
     <View style={styles.container}>
       <View style={styles.summary}>
         {Object.keys(cart).map(productId => {
-          const product = products.find(p => p.id === productId); // UUID is a string
+          const product = products.find(p => p.id === productId);
           return (
             <View key={product.id} style={styles.productItem}>
               <Text style={styles.productText}>{cart[productId]} x {product.name}</Text>
