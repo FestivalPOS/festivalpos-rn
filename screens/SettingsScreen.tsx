@@ -1,16 +1,18 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, TextInput, Alert, Modal, Pressable } from 'react-native';
+import { View, TextInput, Modal, StyleSheet, Pressable, Text } from 'react-native';
+import { Snackbar } from 'react-native-paper';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { fetchProducts } from '../services/api';
-import { Camera, CameraView } from 'expo-camera'; // Import Camera for permissions
+import { Camera, CameraView } from 'expo-camera';
 
-// Import custom colors
 import { Colors } from '../constants/Colors';
 
 const SettingsScreen = ({ navigation }) => {
   const [url, setUrl] = useState('');
   const [hasPermission, setHasPermission] = useState(null);
   const [isScannerOpen, setIsScannerOpen] = useState(false);
+  const [snackbarVisible, setSnackbarVisible] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState('');
 
   useEffect(() => {
     loadUrl();
@@ -31,7 +33,7 @@ const SettingsScreen = ({ navigation }) => {
 
   const saveUrl = async () => {
     await AsyncStorage.setItem('productUrl', url);
-    Alert.alert('Success', 'URL saved successfully');
+    showSnackbar('URL saved successfully');
   };
 
   const fetchNewData = async () => {
@@ -42,14 +44,19 @@ const SettingsScreen = ({ navigation }) => {
   const handleBarCodeScanned = (data) => {
     setUrl(data.data);
     setIsScannerOpen(false);
-    Alert.alert('Scan successful!', `URL has been set to: ${data.data}`);
+    showSnackbar('Scan successful! URL has been set.');
+  };
+
+  const showSnackbar = (message) => {
+    setSnackbarMessage(message);
+    setSnackbarVisible(true);
   };
 
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Settings</Text>
       <View style={styles.box}>
-        <Pressable style={styles.button} onPress={() => setIsScannerOpen(true)}>
+      <Pressable style={styles.button} onPress={() => setIsScannerOpen(true)}>
           <Text style={styles.buttonText}>Scan QR Code</Text>
         </Pressable>
         <Pressable style={styles.button} onPress={fetchNewData}>
@@ -87,7 +94,7 @@ const SettingsScreen = ({ navigation }) => {
               }}
             >
               <View style={styles.cameraContent}>
-                <Pressable style={styles.button} onPress={() => setIsScannerOpen(false)}>
+              <Pressable style={styles.button} onPress={() => setIsScannerOpen(false)}>
                   <Text style={styles.buttonText}>Close Scanner</Text>
                 </Pressable>
                 <Pressable style={styles.button}>
@@ -98,6 +105,19 @@ const SettingsScreen = ({ navigation }) => {
           </View>
         </Modal>
       )}
+
+      <Snackbar
+        visible={snackbarVisible}
+        onDismiss={() => setSnackbarVisible(false)}
+        action={{
+          label: 'OK',
+          onPress: () => {
+            // Handle action here (optional)
+          },
+        }}
+        duration={Snackbar.DURATION_SHORT}>
+        {snackbarMessage}
+      </Snackbar>
     </View>
   );
 };
@@ -120,15 +140,11 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  text: {
-    fontSize: 18,
-    color: Colors.text,
-    marginBottom: 20,
-  },
   input: {
     height: 40,
     width: 300,
     marginBottom: 20,
+    marginTop: 20,
     borderWidth: 1,
     borderColor: Colors.icon,
     padding: 10,
