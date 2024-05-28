@@ -31,13 +31,40 @@ const SettingsScreen = ({ navigation }) => {
       });
       return;
     }
-    
-    await updateURL(url);
-    Toast.show({
-      type: 'success',
-      text1: 'POS URL saved successfully',
-      position: 'bottom'
-    });
+
+    try {
+      await updateURL(url);
+      Toast.show({
+        type: 'success',
+        text1: 'POS URL saved successfully',
+        position: 'bottom'
+      });
+    } catch (error) {
+      Toast.show({
+        type: 'error',
+        text1: 'Could not save POS URL',
+        text2: error.message,
+        position: 'bottom'
+      })
+    }
+  };
+
+  const reloadProducts = async () => {
+    try {
+      await refreshProducts();
+      Toast.show({
+        type: 'success',
+        text1: 'Products refreshed',
+        position: 'bottom'
+      });
+    } catch (error) {
+      Toast.show({
+        type: 'error',
+        text1: 'Could not refresh products',
+        text2: error.message,
+        position: 'bottom'
+      })
+    }
   };
 
   return (
@@ -46,25 +73,29 @@ const SettingsScreen = ({ navigation }) => {
         <ActivityIndicator size="large" color={Colors.icon} />
       ) : (
         <View>
-          <View style={styles.box}><Text style={styles.pos}>Current POS: {pos.name}</Text></View>
+          {pos.name.length > 0 ?? ( <View style={styles.box}><Text style={styles.pos}>Current POS: {pos.name}</Text></View> )}
           <View style={styles.box}>
             <Pressable style={styles.button} onPress={() => navigation.navigate('QRScanner')}>
               <Text style={styles.buttonText}>Scan QR Code</Text>
             </Pressable>
-            <Pressable style={styles.button} onPress={() => refreshProducts}>
+            {pos.name.length > 0 ?? ( 
+            <Pressable style={styles.button} onPress={reloadProducts}>
               <Text style={styles.buttonText}>Refresh Products</Text>
             </Pressable>
+            )}
           </View>
-          <TextInput
-            style={styles.input}
-            placeholder="Enter URL"
-            placeholderTextColor={Colors.icon}
-            value={url}
-            onChangeText={setUrl}
-          />
-          <Pressable style={styles.button} onPress={saveUrl}>
-            <Text style={styles.buttonText}>Save URL</Text>
-          </Pressable>
+          <View>
+            <TextInput
+              style={styles.input}
+              placeholder="Enter URL"
+              placeholderTextColor={Colors.icon}
+              value={url}
+              onChangeText={setUrl}
+            />
+            <Pressable style={styles.button} onPress={saveUrl}>
+              <Text style={styles.buttonText}>Save URL</Text>
+            </Pressable>
+          </View>
         </View>
       )}
     </View>
@@ -101,6 +132,7 @@ const styles = StyleSheet.create({
   button: {
     backgroundColor: Colors.tint,
     padding: 10,
+    margin: 10,
     borderRadius: 10,
   },
   buttonText: {

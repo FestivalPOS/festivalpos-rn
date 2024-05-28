@@ -4,7 +4,6 @@ import { Colors } from '../constants/Colors';
 import { usePOS } from '../contexts/POS.context';
 import { useCart } from '../contexts/Cart.context';
 import { useTranslation } from 'react-i18next';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const { width, height } = Dimensions.get('window');
 const maxTileSize = Math.min(width / 4, height / 3, 200);
@@ -73,7 +72,9 @@ const POSScreen = ({ navigation }) => {
           ))}
         </ScrollView>
       ) : (
-        <Text style={styles.noProductsText}>{t('pos_screen.no_products_available')}</Text>
+        <>
+          <Text style={styles.noProductsText}>{t('pos_screen.no_products_available')}</Text>
+        </>
       )}
 
       <View style={styles.cartSummary}>

@@ -17,14 +17,6 @@ const QRScannerScreen = ({ navigation }) => {
     })();
   }, []);
 
-  /* useEffect(() => {
-    console.log("URL in DrawerNavigator:", pos.url);
-
-    if (pos.url) {
-      
-    }
-  }, [pos.url, navigation]); */
-
   const handleBarCodeScanned = async ({ type, data }) => {
     console.log(data)
     setIsLoading(true);
@@ -32,8 +24,7 @@ const QRScannerScreen = ({ navigation }) => {
       await updateURL(data);
       Toast.show({
         type: 'success',
-        text1: 'Scan successful!',
-        text2: `POS URL saved: ${data}`,
+        text1: 'New POS loaded successful',
         position: 'bottom',
       });
       navigation.navigate('Home', {
@@ -42,10 +33,11 @@ const QRScannerScreen = ({ navigation }) => {
     } catch (error) {
       Toast.show({
         type: 'error',
-        text1: 'Failed to update URL',
+        text1: 'Failed to load POS',
         text2: error.message,
         position: 'bottom',
       });
+      navigation.goBack()
     } finally {
       setIsLoading(false);
     }
