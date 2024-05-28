@@ -2,18 +2,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as FileSystem from 'expo-file-system';
 import Toast from 'react-native-toast-message';
 import { validatePOSData } from '../validators/POSData.validation'
-
-export type POSData = {
-  name: string;
-  products: Array<{
-    id: string;
-    name: string;
-    price: number;
-    order: number;
-    tilecolor?: string;
-    imageURL?: string;
-  }>;
-};
+import { POSData } from '../types/POSData';
 
 export const fetchPOS = async (url) => {
   try {

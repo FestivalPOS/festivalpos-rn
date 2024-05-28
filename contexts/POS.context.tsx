@@ -1,27 +1,7 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { fetchPOS } from '../services/api';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
-export interface Product {
-    id: string;
-    name: string;
-    price: number;
-    tilecolor?: string;
-    imageLocal?: string;
-}
-
-export interface POSData {
-    name: string;
-    url: string;
-    products: Product[];
-}
-
-export interface POSContextType {
-    pos: POSData;
-    loading: boolean;
-    updateURL: (newURL: string) => Promise<void>;
-    refreshProducts: () => Promise<void>;
-}
+import { POSContextType, POSData } from '../types/POSData';
 
 const POSContext = createContext<POSContextType | undefined>(undefined);
 
@@ -30,7 +10,7 @@ interface POSProviderProps {
 }
 
 export const POSProvider: React.FC<POSProviderProps> = ({ children }) => {
-    const [pos, setPOS] = useState<POSData>({ name: '', url: '', products: [] });
+    const [pos, setPOS] = useState<POSData>({ id: '', name: '', url: '', products: [] });
     const [loading, setLoading] = useState<boolean>(false);
 
     useEffect(() => {
@@ -61,7 +41,7 @@ export const POSProvider: React.FC<POSProviderProps> = ({ children }) => {
         setLoading(true);
         try {
             const fetchedPOS = await fetchPOS(currentPos.url);
-            await savePOS({ ...currentPos, name: fetchedPOS.name, products: fetchedPOS.products });
+            await savePOS({ url: currentPos.url, id: fetchedPOS.id, name: fetchedPOS.name, products: fetchedPOS.products });
         } catch (error) {
             throw error;
         } finally {
@@ -70,7 +50,7 @@ export const POSProvider: React.FC<POSProviderProps> = ({ children }) => {
     };
 
     const refreshPOSProducts = async (currentPos: POSData = pos) => {
-        await savePOS({ ...currentPos, name: '', products: [] });
+        await savePOS({ ...currentPos, products: [] });
         try {
             await fetchNewPOSData(currentPos);
         } catch (error) {
@@ -92,7 +72,7 @@ export const POSProvider: React.FC<POSProviderProps> = ({ children }) => {
 
     const updateURL = async (newURL: string) => {
         console.log('Update url and refresh')
-        const newPos = { url: newURL, name: '', products: [] };
+        const newPos = { url: newURL, id: '', name: '', products: [] };
         await savePOS(newPos);
         try {
             await fetchNewPOSData(newPos);

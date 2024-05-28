@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useLayoutEffect } from 'react';
 import { View, Text, Pressable, StyleSheet, Dimensions, Image, ScrollView, ActivityIndicator } from 'react-native';
 import { Colors } from '../constants/Colors';
 import { usePOS } from '../contexts/POS.context';
@@ -12,6 +12,12 @@ const POSScreen = ({ navigation }) => {
   const { pos, loading } = usePOS();
   const { cart, setCart } = useCart();
   const { t } = useTranslation();
+
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      title: pos.name ? `POS  -  ${pos.name}` : 'POS'
+    });
+  }, [pos.name]); 
 
   const addToCart = (product) => {
     setCart((prevCart) => {

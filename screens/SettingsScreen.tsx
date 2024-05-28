@@ -39,6 +39,7 @@ const SettingsScreen = ({ navigation }) => {
         text1: 'POS URL saved successfully',
         position: 'bottom'
       });
+      navigation.navigate('POS');
     } catch (error) {
       Toast.show({
         type: 'error',
@@ -57,6 +58,7 @@ const SettingsScreen = ({ navigation }) => {
         text1: 'Products refreshed',
         position: 'bottom'
       });
+      navigation.navigate('POS');
     } catch (error) {
       Toast.show({
         type: 'error',
@@ -73,12 +75,12 @@ const SettingsScreen = ({ navigation }) => {
         <ActivityIndicator size="large" color={Colors.icon} />
       ) : (
         <View>
-          {pos.name.length > 0 ?? ( <View style={styles.box}><Text style={styles.pos}>Current POS: {pos.name}</Text></View> )}
+          {pos.name.length > 0 && ( <View style={styles.box}><Text style={styles.pos}>Current POS: {pos.name}</Text></View> )}
           <View style={styles.box}>
             <Pressable style={styles.button} onPress={() => navigation.navigate('QRScanner')}>
               <Text style={styles.buttonText}>Scan QR Code</Text>
             </Pressable>
-            {pos.name.length > 0 ?? ( 
+            {pos.name.length > 0 && ( 
             <Pressable style={styles.button} onPress={reloadProducts}>
               <Text style={styles.buttonText}>Refresh Products</Text>
             </Pressable>
