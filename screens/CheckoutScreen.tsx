@@ -7,7 +7,7 @@ const { width } = Dimensions.get('window');
 
 const CheckoutScreen = ({ route, navigation }) => {
   const { cart, resetCart } = useCart();
-  const { products } = route.params;
+  const { pos } = route.params;
 
   const [selectedPayment, setSelectedPayment] = useState(null);
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -18,7 +18,7 @@ const CheckoutScreen = ({ route, navigation }) => {
 
   const calculateTotal = () => {
     return Object.keys(cart).reduce((sum, productId) => {
-      const product = products.find((p) => p.id === productId);
+      const product = pos.products.find((p) => p.id === productId);
       return sum + (product.price * cart[productId]);
     }, 0);
   };
@@ -50,7 +50,7 @@ const CheckoutScreen = ({ route, navigation }) => {
     <View style={styles.container}>
       <View style={styles.summary}>
         {Object.keys(cart).map(productId => {
-          const product = products.find(p => p.id === productId);
+          const product = pos.products.find(p => p.id === productId);
           return (
             <View key={product.id} style={styles.productItem}>
               <Text style={styles.productText}>{cart[productId]} x {product.name}</Text>

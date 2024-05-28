@@ -1,32 +1,18 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { View, Text, Pressable, StyleSheet, Dimensions, Image, ScrollView, ActivityIndicator } from 'react-native';
-import { fetchProducts } from '../services/api';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Colors } from '../constants/Colors';
+import { usePOS } from '../contexts/POS.context';
 import { useCart } from '../contexts/Cart.context';
 import { useTranslation } from 'react-i18next';
-import i18next from 'i18next';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const { width, height } = Dimensions.get('window');
 const maxTileSize = Math.min(width / 4, height / 3, 200);
 
 const POSScreen = ({ navigation }) => {
+  const { pos, loading } = usePOS();
   const { cart, setCart } = useCart();
-  const [products, setProducts] = useState([]);
-  const [loading, setLoading] = useState(true);
-  
   const { t } = useTranslation();
-
-  useEffect(() => {
-    const initProducts = async () => {
-      setLoading(true);
-      const products = await fetchProducts();
-      setProducts(products.sort((a, b) => a.order - b.order));
-      setLoading(false);
-    };
-  
-    initProducts();
-  }, []);
 
   const addToCart = (product) => {
     setCart((prevCart) => {
@@ -49,7 +35,7 @@ const POSScreen = ({ navigation }) => {
 
   const calculateTotal = () => {
     return Object.keys(cart).reduce((sum, productId) => {
-      const product = products.find((p) => p.id === productId);
+      const product = pos.products.find((p) => p.id === productId);
       return sum + ((product?.price ?? 0) * cart[productId]);
     }, 0);
   };
@@ -60,21 +46,19 @@ const POSScreen = ({ navigation }) => {
         <View style={styles.activityIndicator}>
           <ActivityIndicator size="large" color={Colors.icon} />
         </View>
-      ) : products.length > 0 ? (
+      ) : (pos.products && pos.products.length > 0) ? (
         <ScrollView contentContainerStyle={styles.productContainer}>
-          {products.map((item) => (
+          {pos.products.map((item) => (
             <View style={styles.productItem} key={item.id}>
               <Pressable onPress={() => addToCart(item)} style={[styles.productSquare, { backgroundColor: item.tilecolor }]}>
-                
                 {item.imageLocal && (
                   <Image
                     source={{ uri: item.imageLocal }}
                     style={styles.productImage}
                   />
                 )}
-                
                 <Text style={[styles.text, styles.productText]}>
-                  {item.name}{"\n"}CHF {parseFloat(item.price).toFixed(2)}
+                  {item.name}{"\n"}CHF {item.price.toFixed(2)}
                 </Text>
                 {cart[item.id] > 0 && (
                   <Pressable
@@ -91,6 +75,7 @@ const POSScreen = ({ navigation }) => {
       ) : (
         <Text style={styles.noProductsText}>{t('pos_screen.no_products_available')}</Text>
       )}
+
       <View style={styles.cartSummary}>
         <Text style={styles.cartTotal}>Total: CHF {calculateTotal().toFixed(2)}</Text>
         <Pressable
@@ -99,7 +84,7 @@ const POSScreen = ({ navigation }) => {
               ? styles.checkoutButtonInactive
               : styles.checkoutButton
           }
-          onPress={() => navigation.navigate('Checkout', { products })}
+          onPress={() => navigation.navigate('Checkout', { pos })}
           disabled={Object.keys(cart).length === 0}
         >
           <Image
@@ -129,7 +114,7 @@ const styles = StyleSheet.create({
   productContainer: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    justifyContent: 'space-between',
+    justifyContent: 'space-evenly',
     padding: 12,
   },
   productItem: {

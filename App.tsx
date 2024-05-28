@@ -1,46 +1,15 @@
-import 'react-native-gesture-handler';
-import * as React from 'react';
-import './localization/i18n';
-import { DarkTheme } from '@react-navigation/native';
-import { createStackNavigator } from '@react-navigation/stack';
-import { createDrawerNavigator } from '@react-navigation/drawer';
-import { NavigationContainer } from '@react-navigation/native';
+import React from 'react';
+import NavigationComponent from './components/Navigation.component';
 import ContextProvider from './contexts/ContextProvider';
 import Toast from 'react-native-toast-message';
 
-// Screens
-import POSScreen from './screens/POSScreen';
-import SettingsScreen from './screens/SettingsScreen';
-import AboutScreen from './screens/AboutScreen';
-import CheckoutScreen from './screens/CheckoutScreen';
-
-const Drawer = createDrawerNavigator();
-const RootStack = createStackNavigator();
-
-const DrawerNavigator = () => {
+const App = () => {
   return (
-    <Drawer.Navigator screenOptions={{headerTintColor: '#FFFFFF'}} initialRouteName="POSScreen">
-      <Drawer.Screen name="POS" component={POSScreen} />
-      <Drawer.Screen name="Settings" component={SettingsScreen} />
-      <Drawer.Screen name="About" component={AboutScreen} />
-    </Drawer.Navigator>
+    <ContextProvider>
+      <NavigationComponent />
+      <Toast />
+    </ContextProvider>
   );
 };
 
-export default function App() {
-  return (
-    <ContextProvider>
-      <NavigationContainer theme={DarkTheme}>
-          <RootStack.Navigator screenOptions={{ presentation: 'modal' }}>
-              <RootStack.Screen
-                  name="Main"
-                  component={DrawerNavigator}
-                  options={{ headerShown: false }}
-              />
-              <RootStack.Screen name="Checkout" component={CheckoutScreen} />
-          </RootStack.Navigator>
-          <Toast />
-      </NavigationContainer>
-    </ContextProvider>
-  );
-}
+export default App;

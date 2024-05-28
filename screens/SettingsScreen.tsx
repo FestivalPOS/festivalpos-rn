@@ -1,112 +1,71 @@
 import React, { useState, useEffect } from 'react';
-import { View, TextInput, Modal, StyleSheet, Pressable, Text } from 'react-native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { fetchProducts, refreshProducts } from '../services/api';
-import { Camera, CameraView } from 'expo-camera';
-
+import { View, TextInput, StyleSheet, Pressable, Text, ActivityIndicator } from 'react-native';
 import { Colors } from '../constants/Colors';
 import Toast from 'react-native-toast-message';
+import { usePOS } from '../contexts/POS.context';
 
 const SettingsScreen = ({ navigation }) => {
-  const [url, setUrl] = useState('');
-  const [hasPermission, setHasPermission] = useState(null);
-  const [isScannerOpen, setIsScannerOpen] = useState(false);
-  const setLoading = useState(false);
+  const { pos, loading, updateURL, refreshProducts } = usePOS();  // Use updateURL from context
+  const [url, setUrl] = useState(pos.url);  // State to hold URL input
 
   useEffect(() => {
-    loadUrl();
-    requestCameraPermission();
-  }, []);
-
-  const loadUrl = async () => {
-    const savedUrl = await AsyncStorage.getItem('productUrl');
-    if (savedUrl) {
-      setUrl(savedUrl);
+    // Initialize URL input with the current URL from context
+    if (pos.url) {
+      setUrl(pos.url);
+    } else {
+      Toast.show({
+        type: 'info',
+        text1: 'Please scan a FestivalPOS QR Code first',
+        text2: 'This is needed to get data for the POS',
+        position: 'bottom'
+      });
     }
-  };
-
-  const requestCameraPermission = async () => {
-    const { status } = await Camera.requestCameraPermissionsAsync();
-    setHasPermission(status === 'granted');
-  };
+  }, [pos.url]);
 
   const saveUrl = async () => {
-    await AsyncStorage.setItem('productUrl', url);
+    if (!url) {
+      Toast.show({
+        type: 'error',
+        text1: 'URL cannot be empty',
+        position: 'bottom'
+      });
+      return;
+    }
+    
+    await updateURL(url);
     Toast.show({
       type: 'success',
-      text1: 'POS saved successfully',
+      text1: 'POS URL saved successfully',
       position: 'bottom'
-    })
-  };
-
-  const fetchNewData = async () => {
-    const products = await refreshProducts();
-    navigation.navigate('POS', { products });
-  };
-
-  const handleBarCodeScanned = (data) => {
-    setUrl(data.data);
-    setIsScannerOpen(false);
-    Toast.show({
-      type: 'success',
-      text1: 'Scan successfull!',
-      text2: 'POS has been set.',
-      position: 'bottom'
-    })
+    });
   };
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Settings</Text>
-      <View style={styles.box}>
-      <Pressable style={styles.button} onPress={() => setIsScannerOpen(true)}>
-          <Text style={styles.buttonText}>Scan QR Code</Text>
-        </Pressable>
-        <Pressable style={styles.button} onPress={fetchNewData}>
-          <Text style={styles.buttonText}>Refresh Products</Text>
-        </Pressable>
-      </View>
-
-      <TextInput
-        style={styles.input}
-        placeholder="Enter URL"
-        placeholderTextColor={Colors.icon}
-        value={url}
-        onChangeText={setUrl}
-      />
-      <Pressable style={styles.button} onPress={saveUrl}>
-        <Text style={styles.buttonText}>Save URL</Text>
-      </Pressable>
-      
-      {isScannerOpen && hasPermission && (
-        <Modal
-          animationType="slide"
-          transparent={true}
-          visible={isScannerOpen}
-          onRequestClose={() => {
-            setIsScannerOpen(!isScannerOpen);
-          }}
-        >
-          <View style={styles.modalView}>
-            <CameraView
-              style={styles.camera}
-              facing='back'
-              onBarcodeScanned={handleBarCodeScanned}
-              barcodeScannerSettings={{
-                barcodeTypes: ["qr"],
-              }}
-            >
-              <View style={styles.cameraContent}>
-              <Pressable style={styles.button} onPress={() => setIsScannerOpen(false)}>
-                  <Text style={styles.buttonText}>Close Scanner</Text>
-                </Pressable>
-                <Pressable style={styles.button}>
-                  <Text style={styles.buttonText}>Flip Cam</Text>
-                </Pressable>
-              </View>
-            </CameraView>
+      {loading ? (
+        <ActivityIndicator size="large" color={Colors.icon} />
+      ) : (
+        <View>
+          <View style={styles.box}><Text style={styles.pos}>Current POS: {pos.name}</Text></View>
+          <View style={styles.box}>
+            <Pressable style={styles.button} onPress={() => navigation.navigate('QRScanner')}>
+              <Text style={styles.buttonText}>Scan QR Code</Text>
+            </Pressable>
+            <Pressable style={styles.button} onPress={() => refreshProducts}>
+              <Text style={styles.buttonText}>Refresh Products</Text>
+            </Pressable>
           </View>
-        </Modal>
+          <TextInput
+            style={styles.input}
+            placeholder="Enter URL"
+            placeholderTextColor={Colors.icon}
+            value={url}
+            onChangeText={setUrl}
+          />
+          <Pressable style={styles.button} onPress={saveUrl}>
+            <Text style={styles.buttonText}>Save URL</Text>
+          </Pressable>
+        </View>
       )}
     </View>
   );
@@ -120,57 +79,34 @@ const styles = StyleSheet.create({
     padding: 20,
     backgroundColor: Colors.background,
   },
-  title: {
-    fontSize: 24,
-    color: Colors.text,
-    marginBottom: 20,
-  },
   box: {
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
+    marginBottom: 20,
+  },
+  pos: {
+    color: Colors.text,
+    fontSize: 16,
   },
   input: {
     height: 40,
     width: 300,
     marginBottom: 20,
-    marginTop: 20,
     borderWidth: 1,
     borderColor: Colors.icon,
     padding: 10,
     color: Colors.text,
   },
-  camera: {
-    height: '100%',
-    width: '100%',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  cameraContent: {
-    backgroundColor: 'transparent',
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    position: 'absolute',
-    bottom: 20,
-    left: 20,
-    right: 20,
-  },
   button: {
     backgroundColor: Colors.tint,
     padding: 10,
-    margin: 10,
     borderRadius: 10,
   },
   buttonText: {
     color: Colors.background,
     textAlign: 'center',
-  },
-  modalView: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginTop: 22
-  },
+  }
 });
 
 export default SettingsScreen;
