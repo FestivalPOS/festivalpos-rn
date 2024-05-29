@@ -5,20 +5,21 @@ import { POSData } from '../types/POSData';
 import { Sale } from '../types/Sale';
 
 export const fetchPOS = async (url) => {
+  
   try {
     let response;
     // Fetch data from the network using the saved URL
     try {
       response = await fetch(url);
     } catch {
-      throw new Error('Could not reach server.')
+      throw new Error('errors.could_not_reach_server')
     }
 
     const posData: POSData = await response.json();
     
     // Validate JSON data against the schema
     if (!validatePOSData(posData)) {
-        throw new Error('Validation failed for the fetched data.');
+        throw new Error('errors.validation_failed_for_fetched_data');
     }
 
     // Load icons

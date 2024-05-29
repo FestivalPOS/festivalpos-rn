@@ -7,11 +7,12 @@ import { Sale } from '../types/Sale';
 import 'react-native-get-random-values';
 import { v4 as uuidv4 } from 'uuid';
 import { postSale } from '../services/api';
-
+import { useTranslation } from 'react-i18next';
 
 const { width } = Dimensions.get('window');
 
 const CheckoutScreen = ({ route, navigation }) => {
+  const { t } = useTranslation();
   const { cart, resetCart } = useCart();
   const { addSale } = useSales()
   const { pos } = route.params;
@@ -93,12 +94,12 @@ const CheckoutScreen = ({ route, navigation }) => {
           );
         })}
         <View style={styles.totalRow}>
-          <Text style={styles.totalText}>Total:</Text>
+          <Text style={styles.totalText}>{t('screens.checkout.total')}:</Text>
           <Text style={styles.totalAmount}>CHF {total}</Text>
         </View>
         {change !== null && (
           <View style={styles.productItem}>
-            <Text style={styles.changeText}>Wechselgeld:</Text>
+            <Text style={styles.changeText}>{t('screens.checkout.change')}:</Text>
             <Text style={styles.changeAmount}>CHF {change}</Text>
           </View>
         )}
@@ -107,25 +108,25 @@ const CheckoutScreen = ({ route, navigation }) => {
         {selectedPayment === null ? (
           <>
             <Pressable style={styles.finishButton} onPress={handleFinish}>
-              <Text style={styles.paymentButtonText}>Abschliessen</Text>
+              <Text style={styles.paymentButtonText}>{t('screens.checkout.finalise')}</Text>
             </Pressable>
             <Pressable style={styles.paymentButtonInactive} onPress={() => handlePayment('Twint')} disabled={true}>
               <Text style={styles.paymentButtonText}>Twint</Text>
             </Pressable>
             <Pressable style={styles.paymentButton} onPress={() => handlePayment('Bar')}>
-              <Text style={styles.paymentButtonText}>Bar</Text>
+              <Text style={styles.paymentButtonText}>{t('screens.checkout.cash')}</Text>
             </Pressable>
           </>
         ) : (
           <Pressable style={styles.finishButton} onPress={handleFinish}>
-            <Text style={styles.paymentButtonText}>Abschliessen</Text>
+            <Text style={styles.paymentButtonText}>{t('screens.checkout.finalise')}</Text>
           </Pressable>
         )}
       </View>
       <Modal visible={isModalVisible} transparent animationType="slide" onRequestClose={() => { setIsModalVisible(false) }} onShow={() => { setTimeout(() => { amountInput.current.focus() }, 100) }}>
         <View style={styles.modalContainer}>
           <View style={styles.modalContent}>
-            <Text style={styles.modalTitle}>Erhaltenen Betrag eingeben</Text>
+            <Text style={styles.modalTitle}>{t('screens.checkout.enter_amount_recieved')}</Text>
             <TextInput
               style={styles.input}
               inputMode="numeric"
@@ -137,7 +138,7 @@ const CheckoutScreen = ({ route, navigation }) => {
               ref={amountInput}
             />
             <Pressable style={styles.calculateButton} onPress={handleCalculateChange}>
-              <Text style={styles.calculateButtonText}>Wechselgeld berechnen</Text>
+              <Text style={styles.calculateButtonText}>{t('screens.checkout.calculate_change')}</Text>
             </Pressable>
           </View>
         </View>

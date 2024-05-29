@@ -79,12 +79,12 @@ const POSScreen = ({ navigation }) => {
         </ScrollView>
       ) : (
         <>
-          <Text style={styles.noProductsText}>{t('pos_screen.no_products_available')}</Text>
+          <Text style={styles.noProductsText}>{t('screens.pos.no_products_available')}</Text>
         </>
       )}
 
       <View style={styles.cartSummary}>
-        <Text style={styles.cartTotal}>Total: CHF {calculateTotal().toFixed(2)}</Text>
+        <Text style={styles.cartTotal}>{t('screens.pos.total')}: CHF {calculateTotal().toFixed(2)}</Text>
         <Pressable
           style={
             Object.keys(cart).length === 0
@@ -98,7 +98,7 @@ const POSScreen = ({ navigation }) => {
             style={styles.checkoutIcon}
             source={require('../assets/buyer_pay_icon.png')}
           />
-          <Text style={styles.checkoutButtonText}>Einkassieren</Text>
+          <Text style={styles.checkoutButtonText}>{t('screens.pos.cash_in')}</Text>
         </Pressable>
       </View>
     </View>

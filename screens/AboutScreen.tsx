@@ -2,11 +2,13 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { Colors } from '../constants/Colors';
+import { useTranslation } from 'react-i18next';
 
 export default function AboutScreen() {
+  const { t } = useTranslation();
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>About bla bla</Text>
+      <Text style={styles.title}>{t('screens.about.title')}</Text>
     </View>
   );
 }

@@ -4,9 +4,11 @@ import { Camera, CameraView } from 'expo-camera';
 import Toast from 'react-native-toast-message';
 import { Colors } from '../constants/Colors';
 import { usePOS } from '../contexts/POS.context';
+import { useTranslation } from 'react-i18next';
 
 const QRScannerScreen = ({ navigation }) => {
   const { pos, updateURL } = usePOS();
+  const { t } = useTranslation();
   const [hasPermission, setHasPermission] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -24,7 +26,7 @@ const QRScannerScreen = ({ navigation }) => {
       await updateURL(data);
       Toast.show({
         type: 'success',
-        text1: 'New POS loaded successful',
+        text1: t('screens.qrscanner.new_pos_loaded_successful'),
         position: 'bottom',
       });
       navigation.navigate('Home', {
@@ -33,7 +35,7 @@ const QRScannerScreen = ({ navigation }) => {
     } catch (error) {
       Toast.show({
         type: 'error',
-        text1: 'Failed to load POS',
+        text1: t('screens.qrscanner.failed_to_load_pos'),
         text2: error.message,
         position: 'bottom',
       });
@@ -44,18 +46,18 @@ const QRScannerScreen = ({ navigation }) => {
   };
 
   if (hasPermission === null) {
-    return <Text>Requesting for camera permission...</Text>;
+    return <Text>{t('screens.qrscanner.requesting_camera_permission')}</Text>;
   }
 
   if (hasPermission === false) {
-    return <Text>No access to camera</Text>;
+    return <Text>{t('screens.qrscanner.no_camera_access')}</Text>;
   }
 
   if (isLoading) {
     return (
       <View style={styles.centeredView}>
         <ActivityIndicator size="large" color={Colors.tint} />
-        <Text style={styles.loadingText}>Processing...</Text>
+        <Text style={styles.loadingText}>{t('screens.qrscanner.processing')}</Text>
       </View>
     );
   }
@@ -72,7 +74,7 @@ const QRScannerScreen = ({ navigation }) => {
       >
         <View style={styles.cameraContent}>
           <Pressable style={styles.button} onPress={() => navigation.goBack()}>
-            <Text style={styles.buttonText}>Close Scanner</Text>
+            <Text style={styles.buttonText}>{t('screens.qrscanner.close_scanner')}</Text>
           </Pressable>
         </View>
       </CameraView>

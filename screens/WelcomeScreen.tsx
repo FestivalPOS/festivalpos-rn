@@ -1,14 +1,16 @@
 import React from 'react';
 import { View, Text, Button, StyleSheet } from 'react-native';
 import { Colors } from '../constants/Colors';
+import { useTranslation } from 'react-i18next';
 
 const WelcomeScreen = ({ navigation }) => {
-
+    const { t } = useTranslation();
+    
     return (
         <View style={styles.container}>
-            <Text style={styles.title}>Welcome to FestivalPOS</Text>
+            <Text style={styles.title}>{t('welcome_to_festivalpos')}</Text>
             <Button
-                title="Go to QR Scanner"
+                title={t('screens.welcome.go_to_qrscanner')}
                 onPress={() => navigation.navigate('QRScanner')}
                 color="#1E90FF"
             />

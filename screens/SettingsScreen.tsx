@@ -3,10 +3,12 @@ import { View, TextInput, StyleSheet, Pressable, Text, ActivityIndicator } from 
 import { Colors } from '../constants/Colors';
 import Toast from 'react-native-toast-message';
 import { usePOS } from '../contexts/POS.context';
+import { useTranslation } from 'react-i18next';
 
 const SettingsScreen = ({ navigation }) => {
   const { pos, loading, updateURL, refreshProducts } = usePOS();  // Use updateURL from context
   const [url, setUrl] = useState(pos.url);  // State to hold URL input
+  const { t } = useTranslation();
 
   useEffect(() => {
     // Initialize URL input with the current URL from context
@@ -15,8 +17,8 @@ const SettingsScreen = ({ navigation }) => {
     } else {
       Toast.show({
         type: 'info',
-        text1: 'Please scan a FestivalPOS QR Code first',
-        text2: 'This is needed to get data for the POS',
+        text1: t('screens.settings.scan_qr_first'),
+        text2: t('screens.settings.needed_for_pos_data'),
         position: 'bottom'
       });
     }
@@ -26,7 +28,7 @@ const SettingsScreen = ({ navigation }) => {
     if (!url) {
       Toast.show({
         type: 'error',
-        text1: 'URL cannot be empty',
+        text1: t('screens.settings.url_cannot_be_empty'),
         position: 'bottom'
       });
       return;
@@ -36,15 +38,15 @@ const SettingsScreen = ({ navigation }) => {
       await updateURL(url);
       Toast.show({
         type: 'success',
-        text1: 'POS URL saved successfully',
+        text1: t('screens.settings.pos_url_saved'),
         position: 'bottom'
       });
       navigation.navigate('POS');
     } catch (error) {
       Toast.show({
         type: 'error',
-        text1: 'Could not save POS URL',
-        text2: error.message,
+        text1: t('screens.settings.pos_url_not_saved'),
+        text2: t(error.message),
         position: 'bottom'
       })
     }
@@ -55,15 +57,15 @@ const SettingsScreen = ({ navigation }) => {
       await refreshProducts();
       Toast.show({
         type: 'success',
-        text1: 'Products refreshed',
+        text1: t('screens.settings.products_refreshed'),
         position: 'bottom'
       });
       navigation.navigate('POS');
     } catch (error) {
       Toast.show({
         type: 'error',
-        text1: 'Could not refresh products',
-        text2: error.message,
+        text1: t('screens.settings.products_not_refreshed'),
+        text2: t(error.message),
         position: 'bottom'
       })
     }
@@ -75,14 +77,14 @@ const SettingsScreen = ({ navigation }) => {
         <ActivityIndicator size="large" color={Colors.icon} />
       ) : (
         <View>
-          {pos.name.length > 0 && ( <View style={styles.box}><Text style={styles.pos}>Current POS: {pos.name}</Text></View> )}
+          {pos.name.length > 0 && ( <View style={styles.box}><Text style={styles.pos}>{t('screens.settings.current_pos')}: {pos.name}</Text></View> )}
           <View style={styles.box}>
             <Pressable style={styles.button} onPress={() => navigation.navigate('QRScanner')}>
-              <Text style={styles.buttonText}>Scan QR Code</Text>
+              <Text style={styles.buttonText}>{t('screens.settings.scan_qr_code')}</Text>
             </Pressable>
             {pos.name.length > 0 && ( 
             <Pressable style={styles.button} onPress={reloadProducts}>
-              <Text style={styles.buttonText}>Refresh Products</Text>
+              <Text style={styles.buttonText}>{t('screens.settings.refresh_products')}</Text>
             </Pressable>
             )}
           </View>
@@ -95,7 +97,7 @@ const SettingsScreen = ({ navigation }) => {
               onChangeText={setUrl}
             />
             <Pressable style={styles.button} onPress={saveUrl}>
-              <Text style={styles.buttonText}>Save URL</Text>
+              <Text style={styles.buttonText}>{t('screens.settings.save_url')}</Text>
             </Pressable>
           </View>
         </View>
@@ -124,8 +126,9 @@ const styles = StyleSheet.create({
   },
   input: {
     height: 40,
-    width: 300,
+    width: 500,
     marginBottom: 20,
+    marginHorizontal: 0,
     borderWidth: 1,
     borderColor: Colors.icon,
     padding: 10,

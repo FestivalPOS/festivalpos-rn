@@ -36,7 +36,7 @@ export const POSProvider: React.FC<POSProviderProps> = ({ children }) => {
     const fetchNewPOSData = async (currentPos: POSData) => {
         if (!currentPos.url) {
             console.log('No POS URL available, cannot fetch data');
-            throw new Error('No URL available');
+            throw new Error('errors.no_url_available');
         }
         setLoading(true);
         try {
