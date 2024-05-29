@@ -1,8 +1,8 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as FileSystem from 'expo-file-system';
-import Toast from 'react-native-toast-message';
 import { validatePOSData } from '../validators/POSData.validation'
 import { POSData } from '../types/POSData';
+import { Sale } from '../types/Sale';
 
 export const fetchPOS = async (url) => {
   try {
@@ -30,10 +30,34 @@ export const fetchPOS = async (url) => {
       return product;
     })); */
 
+    // Sort products
+    posData.products = posData.products.sort((a, b) => a.order - b.order)
+
     return posData;
   } catch (error) {
     console.error(error);
     throw error;
+  }
+};
+
+export const postSale = async (saleData: Sale, url: string) => {
+  try {
+      const response = await fetch(url, {
+          method: 'POST',
+          headers: {
+              'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(saleData)
+      });
+
+      if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const result = await response.json();
+      return result;
+  } catch (error) {
+      throw error;
   }
 };
 

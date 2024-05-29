@@ -2,11 +2,18 @@ import React, { useRef, useState, useEffect, MutableRefObject } from 'react';
 import { View, Text, Pressable, StyleSheet, TextInput, Modal, Dimensions } from 'react-native';
 import { Colors } from '../constants/Colors';
 import { useCart } from '../contexts/Cart.context';
+import { useSales } from '../contexts/Sales.context';
+import { Sale } from '../types/Sale';
+import 'react-native-get-random-values';
+import { v4 as uuidv4 } from 'uuid';
+import { postSale } from '../services/api';
+
 
 const { width } = Dimensions.get('window');
 
 const CheckoutScreen = ({ route, navigation }) => {
   const { cart, resetCart } = useCart();
+  const { addSale } = useSales()
   const { pos } = route.params;
 
   const [selectedPayment, setSelectedPayment] = useState(null);
@@ -39,9 +46,36 @@ const CheckoutScreen = ({ route, navigation }) => {
     setSelectedPayment('Bar');
   };
 
-  const handleFinish = () => {
+  const handleFinish = async () => {
+    const saleData: Sale  = {
+      id: uuidv4(),
+      vendorPointId: pos.id,
+      saleDate: new Date(),
+      saleItems: Object.keys(cart).map(productId => {
+        const product = pos.products.find(p => p.id === productId);
+        return {
+          productId: productId,
+          quantity: cart[productId],
+          sellingPrice: product.price,
+        };
+      }),
+    };
+
     resetCart();
     navigation.navigate('POS');
+  
+    const postUrl = pos.url.split('/pos')[0] + '/pos/sale';
+
+    try {
+      await postSale(saleData, postUrl);
+      resetCart();
+      navigation.navigate('POS');
+    } catch (error) {
+      console.info("Failed to post sale to API, saving to cache: ", error);
+      addSale(saleData, postUrl);
+      resetCart();
+      navigation.navigate('POS');
+    }
   };
 
   const total = calculateTotal().toFixed(2);
