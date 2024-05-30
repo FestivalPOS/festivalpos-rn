@@ -96,7 +96,7 @@ const POSScreen = ({ navigation }) => {
         >
           <Image
             style={styles.checkoutIcon}
-            source={require('../assets/buyer_pay_icon.png')}
+            source={require('../assets/buyer-pay-icon.svg')}
           />
           <Text style={styles.checkoutButtonText}>{t('screens.pos.cash_in')}</Text>
         </Pressable>
