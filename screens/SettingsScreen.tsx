@@ -1,13 +1,21 @@
 import React, { useState, useEffect } from 'react';
-import { View, TextInput, StyleSheet, Pressable, Text, ActivityIndicator, Platform } from 'react-native';
+import {
+  View,
+  TextInput,
+  StyleSheet,
+  Pressable,
+  Text,
+  ActivityIndicator,
+  Platform,
+} from 'react-native';
 import { Colors } from '../constants/Colors';
 import Toast from 'react-native-toast-message';
 import { usePOS } from '../contexts/POS.context';
 import { useTranslation } from 'react-i18next';
 
 const SettingsScreen = ({ navigation }) => {
-  const { pos, loading, updateURL, refreshProducts } = usePOS();  // Use updateURL from context
-  const [url, setUrl] = useState(pos.url);  // State to hold URL input
+  const { pos, loading, updateURL, refreshProducts } = usePOS(); // Use updateURL from context
+  const [url, setUrl] = useState(pos.url); // State to hold URL input
   const { t } = useTranslation();
 
   useEffect(() => {
@@ -19,7 +27,7 @@ const SettingsScreen = ({ navigation }) => {
         type: 'info',
         text1: t('screens.settings.scan_qr_first'),
         text2: t('screens.settings.needed_for_pos_data'),
-        position: 'bottom'
+        position: 'bottom',
       });
     }
   }, [pos.url]);
@@ -29,7 +37,7 @@ const SettingsScreen = ({ navigation }) => {
       Toast.show({
         type: 'error',
         text1: t('screens.settings.url_cannot_be_empty'),
-        position: 'bottom'
+        position: 'bottom',
       });
       return;
     }
@@ -39,7 +47,7 @@ const SettingsScreen = ({ navigation }) => {
       Toast.show({
         type: 'success',
         text1: t('screens.settings.pos_url_saved'),
-        position: 'bottom'
+        position: 'bottom',
       });
       navigation.navigate('POS');
     } catch (error) {
@@ -47,8 +55,8 @@ const SettingsScreen = ({ navigation }) => {
         type: 'error',
         text1: t('screens.settings.pos_url_not_saved'),
         text2: t(error.message),
-        position: 'bottom'
-      })
+        position: 'bottom',
+      });
     }
   };
 
@@ -58,7 +66,7 @@ const SettingsScreen = ({ navigation }) => {
       Toast.show({
         type: 'success',
         text1: t('screens.settings.products_refreshed'),
-        position: 'bottom'
+        position: 'bottom',
       });
       navigation.navigate('POS');
     } catch (error) {
@@ -66,8 +74,8 @@ const SettingsScreen = ({ navigation }) => {
         type: 'error',
         text1: t('screens.settings.products_not_refreshed'),
         text2: t(error.message),
-        position: 'bottom'
-      })
+        position: 'bottom',
+      });
     }
   };
 
@@ -77,30 +85,45 @@ const SettingsScreen = ({ navigation }) => {
         <ActivityIndicator size="large" color={Colors.icon} />
       ) : (
         <View>
-          {pos.name.length > 0 && ( <View style={styles.box}><Text style={styles.pos}>{t('screens.settings.current_pos')}: {pos.name}</Text></View> )}
+          {pos.name.length > 0 && (
+            <View style={styles.box}>
+              <Text style={styles.pos}>
+                {t('screens.settings.current_pos')}: {pos.name}
+              </Text>
+            </View>
+          )}
           <View style={styles.box}>
-            <Pressable style={styles.button} onPress={() => navigation.navigate('QRScanner')}>
-              <Text style={styles.buttonText}>{t('screens.settings.scan_qr_code')}</Text>
+            <Pressable
+              style={styles.button}
+              onPress={() => navigation.navigate('QRScanner')}
+            >
+              <Text style={styles.buttonText}>
+                {t('screens.settings.scan_qr_code')}
+              </Text>
             </Pressable>
-            {pos.name.length > 0 && ( 
-            <Pressable style={styles.button} onPress={reloadProducts}>
-              <Text style={styles.buttonText}>{t('screens.settings.refresh_products')}</Text>
-            </Pressable>
+            {pos.name.length > 0 && (
+              <Pressable style={styles.button} onPress={reloadProducts}>
+                <Text style={styles.buttonText}>
+                  {t('screens.settings.refresh_products')}
+                </Text>
+              </Pressable>
             )}
           </View>
           {Platform.OS === 'web' && (
-          <View>
-            <TextInput
-              style={styles.input}
-              placeholder={t("screens.settings.enter_url_manually")}
-              placeholderTextColor={Colors.icon}
-              value={url}
-              onChangeText={setUrl}
-            />
-            <Pressable style={styles.button} onPress={saveUrl}>
-              <Text style={styles.buttonText}>{t('screens.settings.save_url')}</Text>
-            </Pressable>
-          </View>
+            <View>
+              <TextInput
+                style={styles.input}
+                placeholder={t('screens.settings.enter_url_manually')}
+                placeholderTextColor={Colors.icon}
+                value={url}
+                onChangeText={setUrl}
+              />
+              <Pressable style={styles.button} onPress={saveUrl}>
+                <Text style={styles.buttonText}>
+                  {t('screens.settings.save_url')}
+                </Text>
+              </Pressable>
+            </View>
           )}
         </View>
       )}
@@ -146,7 +169,7 @@ const styles = StyleSheet.create({
   buttonText: {
     color: Colors.background,
     textAlign: 'center',
-  }
+  },
 });
 
 export default SettingsScreen;

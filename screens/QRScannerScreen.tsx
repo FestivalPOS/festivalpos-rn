@@ -1,5 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, Pressable, ActivityIndicator } from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  Pressable,
+  ActivityIndicator,
+} from 'react-native';
 import { Camera, CameraView } from 'expo-camera';
 import Toast from 'react-native-toast-message';
 import { Colors } from '../constants/Colors';
@@ -20,7 +26,7 @@ const QRScannerScreen = ({ navigation }) => {
   }, []);
 
   const handleBarCodeScanned = async ({ type, data }) => {
-    console.log(data)
+    console.log(data);
     setIsLoading(true);
     try {
       await updateURL(data);
@@ -30,7 +36,7 @@ const QRScannerScreen = ({ navigation }) => {
         position: 'bottom',
       });
       navigation.navigate('Home', {
-        screen: 'POS'
+        screen: 'POS',
       });
     } catch (error) {
       Toast.show({
@@ -39,7 +45,7 @@ const QRScannerScreen = ({ navigation }) => {
         text2: error.message,
         position: 'bottom',
       });
-      navigation.goBack()
+      navigation.goBack();
     } finally {
       setIsLoading(false);
     }
@@ -57,7 +63,9 @@ const QRScannerScreen = ({ navigation }) => {
     return (
       <View style={styles.centeredView}>
         <ActivityIndicator size="large" color={Colors.tint} />
-        <Text style={styles.loadingText}>{t('screens.qrscanner.processing')}</Text>
+        <Text style={styles.loadingText}>
+          {t('screens.qrscanner.processing')}
+        </Text>
       </View>
     );
   }
@@ -66,7 +74,7 @@ const QRScannerScreen = ({ navigation }) => {
     <View style={styles.container}>
       <CameraView
         style={styles.camera}
-        facing='back'
+        facing="back"
         onBarcodeScanned={handleBarCodeScanned}
         barcodeScannerSettings={{
           barcodeTypes: ['qr'],
@@ -74,7 +82,9 @@ const QRScannerScreen = ({ navigation }) => {
       >
         <View style={styles.cameraContent}>
           <Pressable style={styles.button} onPress={() => navigation.goBack()}>
-            <Text style={styles.buttonText}>{t('screens.qrscanner.close_scanner')}</Text>
+            <Text style={styles.buttonText}>
+              {t('screens.qrscanner.close_scanner')}
+            </Text>
           </Pressable>
         </View>
       </CameraView>

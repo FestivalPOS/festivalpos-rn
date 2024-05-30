@@ -1,8 +1,11 @@
 {
   "expo": {
     "name": "FestivalPOS",
-    "slug": "FestivalPOS",
+    "slug": "festivalpos-rn",
+    "scheme": "festival-pos",
+    "owner": "festival-pos",
     "version": "1.0.0",
+    "githubUrl": "https://github.com/FestivalPOS/festivalpos-rn",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "dark",
@@ -12,16 +15,29 @@
       "backgroundColor": "#ffffff"
     },
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "sg.aufgetischt.festival-pos",
+      "infoPlist": {
+        "NSCameraUsageDescription": "Allow $(PRODUCT_NAME) to use the camera to scan a QR code",
+        "NSMicrophoneUsageDescription": "Allow $(PRODUCT_NAME) to use the microphone."
+      }
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "sg.aufgetischt.festival_pos",
+      "permissions": [
+        "android.permission.CAMERA",
+        "android.permission.RECORD_AUDIO"
+      ]
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "runtimeVersion": {
+      "policy": "sdkVersion"
     },
     "plugins": [
       [
@@ -33,6 +49,22 @@
         }
       ],
       "expo-localization"
-    ]
+    ],
+    "hooks": {
+      "postPublish": [
+        {
+          "file": "sentry-expo/upload-sourcemaps",
+          "config": {
+            "organization": "festival-pos",
+            "project": "app"
+          }
+        }
+      ]
+    },
+    "extra": {
+      "eas": {
+        "projectId": "7f60a1bf-03cb-45a1-8b66-9acb1db3a305"
+      }
+    }
   }
 }

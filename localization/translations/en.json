@@ -1,59 +1,59 @@
 {
-    "language": "English",
-    "nav": {
-        "settings" : "Settings",
-        "about" : "About",
-        "welcome" : "Welcome",
-        "checkout" : "Checkout",
-        "qrscanner" : "QR Scanner"
+  "language": "English",
+  "nav": {
+    "settings": "Settings",
+    "about": "About",
+    "welcome": "Welcome",
+    "checkout": "Checkout",
+    "qrscanner": "QR Scanner"
+  },
+  "screens": {
+    "pos": {
+      "no_products_available": "No products available",
+      "total": "Total",
+      "cash_in": "Collect"
     },
-    "screens": {
-        "pos": {
-            "no_products_available": "No products available",
-            "total": "Total",
-            "cash_in": "Collect"
-        },
-        "about" : {
-            "title": "About"
-        },
-        "checkout" : {
-            "total" : "Total",
-            "change" : "Change",
-            "finalise" : "Finalise",
-            "cash" : "Cash",
-            "enter_amount_recieved": "Enter amount recieved",
-            "calculate_change": "Calculate change"
-        },
-        "qrscanner" : {
-            "new_pos_loaded_successful" : "New POS loaded successful",
-            "failed_to_load_pos" : "Failed to load POS",
-            "requesting_camera_permission" : "Requesting for camera permission...",
-            "no_camera_access" : "No access to camera",
-            "processing" : "Processing...",
-            "close_scanner" : "Close scanner"
-        },
-        "settings" : {
-            "scan_qr_first" : "Please scan a FestivalPOS QR Code first",
-            "needed_for_pos_data" : "This is needed to get data for the POS",
-            "url_cannot_be_empty" : "URL cannot be empty",
-            "pos_url_saved" : "POS URL saved successfully",
-            "pos_url_not_saved" : "Could not save POS URL",
-            "products_refreshed" : "Products refreshed",
-            "products_not_refreshed" : "Could not refresh products",
-            "current_pos" : "Current POS",
-            "scan_qr_code" : "Scan QR Code",
-            "refresh_products" : "Refresh Products",
-            "enter_url_manually": "Enter URL manually",
-            "save_url" : "Save URL"
-        },
-        "welcome" : {
-            "welcome_to_festivalpos" : "Welcome to FestivalPOS",
-            "go_to_qrscanner": "Go to QR Scanner"
-        }
+    "about": {
+      "title": "About"
     },
-    "errors" : {
-        "no_url_available": "No URL available",
-        "could_not_reach_server" : "Could not reach server.",
-        "validation_failed_for_fetched_data" : "Validation failed for the fetched data."
+    "checkout": {
+      "total": "Total",
+      "change": "Change",
+      "finalise": "Finalise",
+      "cash": "Cash",
+      "enter_amount_recieved": "Enter amount recieved",
+      "calculate_change": "Calculate change"
+    },
+    "qrscanner": {
+      "new_pos_loaded_successful": "New POS loaded successful",
+      "failed_to_load_pos": "Failed to load POS",
+      "requesting_camera_permission": "Requesting for camera permission...",
+      "no_camera_access": "No access to camera",
+      "processing": "Processing...",
+      "close_scanner": "Close scanner"
+    },
+    "settings": {
+      "scan_qr_first": "Please scan a FestivalPOS QR Code first",
+      "needed_for_pos_data": "This is needed to get data for the POS",
+      "url_cannot_be_empty": "URL cannot be empty",
+      "pos_url_saved": "POS URL saved successfully",
+      "pos_url_not_saved": "Could not save POS URL",
+      "products_refreshed": "Products refreshed",
+      "products_not_refreshed": "Could not refresh products",
+      "current_pos": "Current POS",
+      "scan_qr_code": "Scan QR Code",
+      "refresh_products": "Refresh Products",
+      "enter_url_manually": "Enter URL manually",
+      "save_url": "Save URL"
+    },
+    "welcome": {
+      "welcome_to_festivalpos": "Welcome to FestivalPOS",
+      "go_to_qrscanner": "Go to QR Scanner"
     }
+  },
+  "errors": {
+    "no_url_available": "No URL available",
+    "could_not_reach_server": "Could not reach server.",
+    "validation_failed_for_fetched_data": "Validation failed for the fetched data."
+  }
 }

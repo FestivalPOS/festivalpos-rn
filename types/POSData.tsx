@@ -1,15 +1,15 @@
-import { Product } from "./Product";
+import { Product } from './Product';
 
 export interface POSData {
-    id: string;
-    name: string;
-    url: string;
-    products: Product[];
+  id: string;
+  name: string;
+  url: string;
+  products: Product[];
 }
 
 export interface POSContextType {
-    pos: POSData;
-    loading: boolean;
-    updateURL: (newURL: string) => Promise<void>;
-    refreshProducts: () => Promise<void>;
+  pos: POSData;
+  loading: boolean;
+  updateURL: (newURL: string) => Promise<void>;
+  refreshProducts: () => Promise<void>;
 }
