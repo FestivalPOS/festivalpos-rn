@@ -7,10 +7,10 @@ import {
   ScrollView,
   Pressable,
   ActivityIndicator,
-  Button,
   Linking,
   Alert,
   Image,
+  Platform,
 } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import {
@@ -66,11 +66,11 @@ export default function AboutScreen() {
         </Pressable>
         <Text style={styles.title}>FestivalPOS</Text>
         <Text style={styles.bodyText}>
-          FestivalPOS was built for logistics management of the Aufgetischt and
+          FestivalPOS was built for supporting the points of sale of the Aufgetischt St.Gallen and
           Buskers Chur Festivals by @screeper.
         </Text>
         <Pressable onPress={() => Linking.openURL(GITHUB_URL)}>
-          <Text style={styles.link}>Athena GitHub page</Text>
+          <Text style={styles.link}>FestivalPOS GitHub page</Text>
         </Pressable>
         <Pressable onPress={() => Linking.openURL(SCREEPER_URL)}>
           <Text style={styles.link}>@screeper</Text>
@@ -87,11 +87,13 @@ export default function AboutScreen() {
         animating={isUpdating}
         size="small"
       />
-      <View>
-        <Pressable onPress={checkForUpdates} style={styles.updateButton}>
-          <Text style={styles.updateButtonText}>Check for updates</Text>
-        </Pressable>
-      </View>
+      {Platform.OS !== 'web' && (
+        <View>
+          <Pressable onPress={checkForUpdates} style={styles.updateButton}>
+            <Text style={styles.updateButtonText}>Check for updates</Text>
+          </Pressable>
+        </View>
+      )}
     </View>
   );
 }
@@ -99,7 +101,7 @@ export default function AboutScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 10,
+    padding: 40,
     alignItems: 'flex-start',
     backgroundColor: Colors.background,
   },
@@ -118,6 +120,7 @@ const styles = StyleSheet.create({
   },
   bodyText: {
     color: Colors.text,
+    marginBottom: 20
   },
   link: {
     color: Colors.tint,

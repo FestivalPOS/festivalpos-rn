@@ -111,7 +111,7 @@ const POSScreen = ({ navigation }) => {
               ? styles.checkoutButtonInactive
               : styles.checkoutButton
           }
-          onPress={() => navigation.navigate('Checkout', { pos })}
+          onPress={() => navigation.navigate('checkout', { pos })}
           disabled={Object.keys(cart).length === 0}
         >
           <Image

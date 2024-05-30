@@ -36,7 +36,7 @@ const QRScannerScreen = ({ navigation }) => {
         position: 'bottom',
       });
       navigation.navigate('Home', {
-        screen: 'POS',
+        screen: 'pos',
       });
     } catch (error) {
       Toast.show({

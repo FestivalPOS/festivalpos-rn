@@ -95,7 +95,7 @@ const SettingsScreen = ({ navigation }) => {
           <View style={styles.box}>
             <Pressable
               style={styles.button}
-              onPress={() => navigation.navigate('QRScanner')}
+              onPress={() => navigation.navigate('qr-scanner')}
             >
               <Text style={styles.buttonText}>
                 {t('screens.settings.scan_qr_code')}

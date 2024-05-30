@@ -72,19 +72,19 @@ const CheckoutScreen = ({ route, navigation }) => {
     };
 
     resetCart();
-    navigation.navigate('POS');
+    navigation.navigate('pos');
 
     const postUrl = pos.url.split('/pos')[0] + '/pos/sale';
 
     try {
       await postSale(saleData, postUrl);
       resetCart();
-      navigation.navigate('POS');
+      navigation.navigate('pos');
     } catch (error) {
       console.info('Failed to post sale to API, saving to cache: ', error);
       addSale(saleData, postUrl);
       resetCart();
-      navigation.navigate('POS');
+      navigation.navigate('pos');
     }
   };
 

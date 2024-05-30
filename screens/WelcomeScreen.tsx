@@ -12,7 +12,7 @@ const WelcomeScreen = ({ navigation }) => {
         {t('screens.welcome.welcome_to_festivalpos')}
       </Text>
       <Pressable
-        onPress={() => navigation.navigate('QRScanner')}
+        onPress={() => navigation.navigate('qr-scanner')}
         style={styles.button}
       >
         <Text style={styles.buttonText}>
