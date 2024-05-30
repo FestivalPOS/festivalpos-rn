@@ -110,9 +110,9 @@ const CheckoutScreen = ({ route, navigation }) => {
             <Pressable style={styles.finishButton} onPress={handleFinish}>
               <Text style={styles.paymentButtonText}>{t('screens.checkout.finalise')}</Text>
             </Pressable>
-            <Pressable style={styles.paymentButtonInactive} onPress={() => handlePayment('Twint')} disabled={true}>
+            {/* <Pressable style={styles.paymentButtonInactive} onPress={() => handlePayment('Twint')} disabled={true}>
               <Text style={styles.paymentButtonText}>Twint</Text>
-            </Pressable>
+            </Pressable> */}
             <Pressable style={styles.paymentButton} onPress={() => handlePayment('Bar')}>
               <Text style={styles.paymentButtonText}>{t('screens.checkout.cash')}</Text>
             </Pressable>

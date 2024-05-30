@@ -14,6 +14,7 @@ import QRScannerScreen from '../screens/QRScannerScreen';
 import WelcomeScreen from '../screens/WelcomeScreen';
 import { useTranslation } from 'react-i18next';
 import { getTabBarIcon } from '../helpers/icons';
+import BrandedDrawerContent from './BrandedDrawer.component';
 
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -27,7 +28,7 @@ const NavigationComponent = () => {
   const drawerKey = pos.url ? "posDrawer" : "welcomeDrawer";
 
   const DrawerNavigator = () => (
-    <Drawer.Navigator key={drawerKey} screenOptions={{headerTintColor: '#FFFFFF'}} initialRouteName={pos.url ? "POS" : "Welcome"}>
+    <Drawer.Navigator key={drawerKey} screenOptions={{headerTintColor: '#FFFFFF'}} initialRouteName={pos.url ? "POS" : "Welcome"} drawerContent={BrandedDrawerContent}>
       {pos.url ? (
         <>
           <Drawer.Screen name="POS" component={POSScreen} options={{drawerIcon: getTabBarIcon({ name: 'calculator-outline' })}} />
