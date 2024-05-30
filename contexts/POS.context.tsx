@@ -20,7 +20,15 @@ export const POSProvider: React.FC<POSProviderProps> = ({ children }) => {
             if (cachedPOS) {
                 setPOS(cachedPOS);
             } else {
-                await fetchNewPOSData(pos);
+                if(pos.url) {
+                    try {
+                        await fetchNewPOSData(pos);
+                    } catch (error) {
+                        throw error;
+                    } finally {
+                        setLoading(false);
+                    }
+                }
             }
             setLoading(false);
         };

@@ -2,7 +2,9 @@ import React, { createContext, useContext, useState, useEffect, ReactNode, Funct
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Sale, SalesContextType } from '../types/Sale';
 import { postSale } from '../services/api';
-import BackgroundFetch from 'react-native-background-fetch';
+import { Platform } from 'react-native';
+import * as BackgroundFetch from 'expo-background-fetch';
+import * as TaskManager from 'expo-task-manager';
 
 const SalesContext = createContext<SalesContextType | undefined>(undefined);
 
@@ -18,26 +20,12 @@ interface SalesProviderProps {
     children: ReactNode;
 }
 
-const configureBackgroundFetch = async () => {
-    // Configure background fetch
-    BackgroundFetch.configure({
-        minimumFetchInterval: 20, // <-- minutes, e.g., 20 minutes
-        stopOnTerminate: false,  // Continue running after app termination
-        startOnBoot: true,       // Start background service on device boot
-        enableHeadless: true     // Enables headless task execution
-    }, async (taskId) => {
-        console.log('[BackgroundFetch] taskId: ', taskId);
-        await retrySavedSales();
-        BackgroundFetch.finish(taskId);
-    }, (error) => {
-        console.log('[BackgroundFetch] failed to start', error);
-    });
-};
+const BACKGROUND_FETCH_TASK = 'background-fetch-sales';
 
-const retrySavedSales = async () => {
+TaskManager.defineTask(BACKGROUND_FETCH_TASK, async () => {
     const savedSales = await AsyncStorage.getItem('salesToRetry');
     if (savedSales) {
-        const salesToRetry: { sale: Sale; retryCount: number; api: string }[] = JSON.parse(savedSales);
+        const salesToRetry = JSON.parse(savedSales);
         for (const saleData of salesToRetry) {
             if (saleData.retryCount >= 10) {
                 console.log(`Removing sale after 10 retries: ${saleData.sale.id}`);
@@ -51,6 +39,31 @@ const retrySavedSales = async () => {
             }
         }
         await AsyncStorage.setItem('salesToRetry', JSON.stringify(salesToRetry));
+        return BackgroundFetch.BackgroundFetchResult.NoData;
+    } else {
+        BackgroundFetch.unregisterTaskAsync(BACKGROUND_FETCH_TASK);
+    }
+});
+
+const configureBackgroundFetch = async () => {
+    const status = await BackgroundFetch.getStatusAsync();
+    switch (status) {
+        case BackgroundFetch.BackgroundFetchStatus.Denied:
+            console.log("Background fetch is denied on this device.");
+            return;
+        case BackgroundFetch.BackgroundFetchStatus.Restricted:
+            console.log("Background fetch is restricted on this device.");
+            return;
+        case BackgroundFetch.BackgroundFetchStatus.Available:
+            console.log("Background fetch is allowed and enabled.");
+            await BackgroundFetch.registerTaskAsync(BACKGROUND_FETCH_TASK, {
+                minimumInterval: 30, // Fetch interval in minutes
+                stopOnTerminate: false,
+                startOnBoot: true
+            });
+            break;
+        default:
+            console.log("Unknown status for background fetch");
     }
 };
 
@@ -58,11 +71,10 @@ export const SalesProvider: FunctionComponent<SalesProviderProps> = ({ children 
     const [sales, setSales] = useState<Sale[]>([]);
 
     useEffect(() => {
-        configureBackgroundFetch();
-        return () => {
-            BackgroundFetch.stop();
-        };
-    }, []);
+        if (Platform.OS !== 'web') {
+            configureBackgroundFetch();
+        }
+    }, [sales]);
 
     const addSale = async (sale: Sale, apiUrl: string) => {
         const currentSales = await AsyncStorage.getItem('salesToRetry');

@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, Button, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, Pressable } from 'react-native';
 import { Colors } from '../constants/Colors';
 import { useTranslation } from 'react-i18next';
 
@@ -8,12 +8,8 @@ const WelcomeScreen = ({ navigation }) => {
     
     return (
         <View style={styles.container}>
-            <Text style={styles.title}>{t('welcome_to_festivalpos')}</Text>
-            <Button
-                title={t('screens.welcome.go_to_qrscanner')}
-                onPress={() => navigation.navigate('QRScanner')}
-                color="#1E90FF"
-            />
+            <Text style={styles.title}>{t('screens.welcome.welcome_to_festivalpos')}</Text>
+            <Pressable onPress={() => navigation.navigate('QRScanner')} style={styles.button}><Text style={styles.buttonText}>{t('screens.welcome.go_to_qrscanner')}</Text></Pressable>
         </View>
     );
 };
@@ -30,6 +26,14 @@ const styles = StyleSheet.create({
         marginBottom: 20,
         textAlign: 'center',
         color: Colors.text,
+    },
+    button: {
+        backgroundColor: '#1E90FF',
+        padding: 10,
+        margin: 10
+    },
+    buttonText: {
+        color: Colors.tint
     }
 });
 

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, TextInput, StyleSheet, Pressable, Text, ActivityIndicator } from 'react-native';
+import { View, TextInput, StyleSheet, Pressable, Text, ActivityIndicator, Platform } from 'react-native';
 import { Colors } from '../constants/Colors';
 import Toast from 'react-native-toast-message';
 import { usePOS } from '../contexts/POS.context';
@@ -88,10 +88,11 @@ const SettingsScreen = ({ navigation }) => {
             </Pressable>
             )}
           </View>
+          {Platform.OS === 'web' && (
           <View>
             <TextInput
               style={styles.input}
-              placeholder="Enter URL"
+              placeholder={t("screens.settings.enter_url_manually")}
               placeholderTextColor={Colors.icon}
               value={url}
               onChangeText={setUrl}
@@ -100,6 +101,7 @@ const SettingsScreen = ({ navigation }) => {
               <Text style={styles.buttonText}>{t('screens.settings.save_url')}</Text>
             </Pressable>
           </View>
+          )}
         </View>
       )}
     </View>
@@ -127,8 +129,9 @@ const styles = StyleSheet.create({
   input: {
     height: 40,
     width: 500,
-    marginBottom: 20,
-    marginHorizontal: 0,
+    maxWidth: '95%',
+    marginVertical: 20,
+    marginHorizontal: 10,
     borderWidth: 1,
     borderColor: Colors.icon,
     padding: 10,

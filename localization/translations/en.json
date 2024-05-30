@@ -43,6 +43,7 @@
             "current_pos" : "Current POS",
             "scan_qr_code" : "Scan QR Code",
             "refresh_products" : "Refresh Products",
+            "enter_url_manually": "Enter URL manually",
             "save_url" : "Save URL"
         },
         "welcome" : {

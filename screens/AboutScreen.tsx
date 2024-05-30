@@ -9,6 +9,7 @@ export default function AboutScreen() {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>{t('screens.about.title')}</Text>
+      <Text style={styles.text}></Text>
     </View>
   );
 }
@@ -17,7 +18,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'flex-start',
-    alignItems: 'center',
+    alignItems: 'flex-start',
     backgroundColor: Colors.background,
     padding: 20
   },
@@ -26,4 +27,7 @@ const styles = StyleSheet.create({
     color: Colors.text,
     marginBottom: 20,
   },
+  text: {
+    
+  }
 });

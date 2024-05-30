@@ -2,7 +2,7 @@
     "language": "Deutsch",
     "nav": {
         "settings" : "Einstellungen",
-        "about" : "Über",
+        "about" : "Info",
         "welcome" : "Willkommen",
         "checkout" : "Checkout",
         "qrscanner" : "QR Scanner"
@@ -14,7 +14,7 @@
             "cash_in": "Einkassieren"
         },
         "about" : {
-            "title": "Über"
+            "title": "Info"
         },
         "checkout" : {
             "total" : "Total",
@@ -43,6 +43,7 @@
             "current_pos" : "Aktueller POS",
             "scan_qr_code" : "QR-Code scannen",
             "refresh_products" : "Produkte aktualisieren",
+            "enter_url_manually": "URL manuell eingeben",
             "save_url" : "URL speichern"
         },
         "welcome" : {

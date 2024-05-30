@@ -32,8 +32,7 @@
           "recordAudioAndroid": true
         }
       ],
-      "expo-localization",
-      "react-native-background-fetch"
+      "expo-localization"
     ]
   }
 }
