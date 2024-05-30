@@ -15,6 +15,8 @@ import WelcomeScreen from '../screens/WelcomeScreen';
 import { useTranslation } from 'react-i18next';
 import { getTabBarIcon } from '../helpers/icons';
 import BrandedDrawerContent from './BrandedDrawer.component';
+import { Platform } from 'react-native';
+import { createURL } from 'expo-linking';
 
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -31,28 +33,34 @@ const NavigationComponent = () => {
       key={drawerKey}
       screenOptions={{ headerTintColor: '#FFFFFF' }}
       initialRouteName={pos.url ? 'POS' : 'Welcome'}
-      drawerContent={BrandedDrawerContent}
+      drawerContent={(props) => <BrandedDrawerContent {...props} />}
     >
       {pos.url ? (
         <>
           <Drawer.Screen
-            name="POS"
+            name="pos"
             component={POSScreen}
             options={{
+              drawerLabel: 'POS',
+              headerTitle: 'POS',
               drawerIcon: getTabBarIcon({ name: 'calculator-outline' }),
             }}
           />
           <Drawer.Screen
-            name={t('nav.settings')}
+            name="settings"
             component={SettingsScreen}
             options={{
+              drawerLabel: t('nav.settings'),
+              headerTitle: t('nav.settings'),
               drawerIcon: getTabBarIcon({ name: 'settings-outline' }),
             }}
           />
           <Drawer.Screen
-            name={t('nav.about')}
+            name="about"
             component={AboutScreen}
             options={{
+              drawerLabel: t('nav.about'),
+              headerTitle: t('nav.about'),
               drawerIcon: getTabBarIcon({ name: 'information-circle-outline' }),
             }}
           />
@@ -60,21 +68,31 @@ const NavigationComponent = () => {
       ) : (
         <>
           <Drawer.Screen
-            name={t('nav.welcome')}
+            name="welcome"
             component={WelcomeScreen}
-            options={{ drawerIcon: getTabBarIcon({ name: 'home-outline' }) }}
-          />
-          <Drawer.Screen
-            name={t('nav.settings')}
-            component={SettingsScreen}
             options={{
-              drawerIcon: getTabBarIcon({ name: 'settings-outline' }),
+              drawerLabel: t('nav.welcome'),
+              headerTitle: t('nav.welcome'),
+              drawerIcon: getTabBarIcon({ name: 'home-outline' }),
             }}
           />
+          {Platform.OS === 'web' && (
+            <Drawer.Screen
+              name="settings"
+              component={SettingsScreen}
+              options={{
+                drawerLabel: t('nav.settings'),
+                headerTitle: t('nav.settings'),
+                drawerIcon: getTabBarIcon({ name: 'settings-outline' }),
+              }}
+            />
+          )}
           <Drawer.Screen
-            name={t('nav.about')}
+            name="about"
             component={AboutScreen}
             options={{
+              drawerLabel: t('nav.about'),
+              headerTitle: t('nav.about'),
               drawerIcon: getTabBarIcon({ name: 'information-circle-outline' }),
             }}
           />
@@ -84,15 +102,43 @@ const NavigationComponent = () => {
   );
 
   return (
-    <NavigationContainer theme={DarkTheme}>
+    <NavigationContainer
+      linking={{
+        enabled: true,
+        prefixes: ['festival-pos://', createURL('/')],
+        config: {
+          screens: {
+            home: {
+              screens: {
+                pos: 'pos',
+                settings: 'settings',
+                about: 'about',
+                welcome: 'welcome',
+              },
+            } as any,
+            checkout: 'checkout',
+            'qr-scanner': 'qrscanner',
+          },
+        },
+      }}
+      theme={DarkTheme}
+    >
       <Stack.Navigator>
         <Stack.Screen
-          name="Home"
+          name="home"
           component={DrawerNavigator}
-          options={{ headerShown: false }}
+          options={{ headerTitle: 'Home', headerShown: false }}
         />
-        <Stack.Screen name={t('nav.checkout')} component={CheckoutScreen} />
-        <Stack.Screen name={t('nav.qrscanner')} component={QRScannerScreen} />
+        <Stack.Screen
+          name="checkout"
+          component={CheckoutScreen}
+          options={{ headerTitle: t('nav.checkout') }}
+        />
+        <Stack.Screen
+          name="qr-scanner"
+          component={QRScannerScreen}
+          options={{ headerTitle: t('nav.qrscanner') }}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );

@@ -43,7 +43,8 @@
     "react-native-toast-message": "^2.2.0",
     "react-native-web": "~0.19.10",
     "typescript": "~5.3.3",
-    "uuid": "^9.0.1"
+    "uuid": "^9.0.1",
+    "expo-linking": "~6.3.1"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0"

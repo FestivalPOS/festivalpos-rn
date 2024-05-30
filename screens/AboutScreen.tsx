@@ -5,7 +5,7 @@ import {
   Text,
   StyleSheet,
   ScrollView,
-  TouchableOpacity,
+  Pressable,
   ActivityIndicator,
   Button,
   Linking,
@@ -29,22 +29,16 @@ import Toast from 'react-native-toast-message';
 
 export default function AboutScreen() {
   const { t } = useTranslation();
-
   const [isUpdating, setIsUpdating] = useState(false);
 
   const checkForUpdates = async () => {
     try {
       setIsUpdating(true);
       const update = await checkForUpdateAsync();
-
       if (update.isAvailable) {
         await fetchUpdateAsync();
-
         Alert.alert(t('app.updated.title'), t('app.updated.description'), [
-          {
-            text: t('ok'),
-            onPress: async () => reloadAsync(),
-          },
+          { text: t('ok'), onPress: async () => reloadAsync() },
         ]);
       } else {
         Toast.show({
@@ -54,7 +48,6 @@ export default function AboutScreen() {
       }
     } catch (error) {
       console.error(error);
-
       Toast.show({
         type: 'error',
         text1: t('app.update.error.title'),
@@ -67,74 +60,82 @@ export default function AboutScreen() {
 
   return (
     <View style={styles.container}>
-      <ScrollView style={styles.body}>
-        <View style={styles.row}>
-          <TouchableOpacity onPress={() => Linking.openURL(GITHUB_URL)}>
-            <Image style={styles.logo} source={require('../assets/logo.png')} />
-          </TouchableOpacity>
-        </View>
-        <View style={styles.row}>
-          <Text style={styles.title}>FestivalPOS</Text>
-          <Text style={styles.bodyText}>
-            FestivalPOS was built for logistics management of the Aufgetischt
-            and Buskers Chur Festivals by @screeper.
-          </Text>
-          <TouchableOpacity onPress={() => Linking.openURL(GITHUB_URL)}>
-            <Text style={styles.link}>Athena GitHub page</Text>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={() => Linking.openURL(SCREEPER_URL)}>
-            <Text style={styles.link}>@screeper</Text>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={() => Linking.openURL(PRIVACY_POLICY_URL)}>
-            <Text style={styles.link}>Privacy policy</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            onPress={() => Linking.openURL(TERMS_AND_CONDITIONS_URL)}
-          >
-            <Text style={styles.link}>Terms & Conditions</Text>
-          </TouchableOpacity>
-        </View>
+      <ScrollView style={styles.scrollView}>
+        <Pressable onPress={() => Linking.openURL(GITHUB_URL)}>
+          <Image style={styles.logo} source={require('../assets/logo.png')} />
+        </Pressable>
+        <Text style={styles.title}>FestivalPOS</Text>
+        <Text style={styles.bodyText}>
+          FestivalPOS was built for logistics management of the Aufgetischt and
+          Buskers Chur Festivals by @screeper.
+        </Text>
+        <Pressable onPress={() => Linking.openURL(GITHUB_URL)}>
+          <Text style={styles.link}>Athena GitHub page</Text>
+        </Pressable>
+        <Pressable onPress={() => Linking.openURL(SCREEPER_URL)}>
+          <Text style={styles.link}>@screeper</Text>
+        </Pressable>
+        <Pressable onPress={() => Linking.openURL(PRIVACY_POLICY_URL)}>
+          <Text style={styles.link}>Privacy policy</Text>
+        </Pressable>
+        <Pressable onPress={() => Linking.openURL(TERMS_AND_CONDITIONS_URL)}>
+          <Text style={styles.link}>Terms & Conditions</Text>
+        </Pressable>
       </ScrollView>
-      <View style={styles.buttons}>
-        {isUpdating ? (
-          <ActivityIndicator size={'small'} />
-        ) : (
-          <Button onPress={checkForUpdates} title="Check for updates" />
-        )}
+      <ActivityIndicator
+        style={styles.activityIndicator}
+        animating={isUpdating}
+        size="small"
+      />
+      <View>
+        <Pressable onPress={checkForUpdates} style={styles.updateButton}>
+          <Text style={styles.updateButtonText}>Check for updates</Text>
+        </Pressable>
       </View>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  row: { flexDirection: 'row', flex: 1, flexWrap: 'wrap', gap: 10 },
-  title: { fontSize: 22, color: Colors.text },
   container: {
+    flex: 1,
     padding: 10,
     alignItems: 'flex-start',
-    gap: 10,
+    backgroundColor: Colors.background,
+  },
+  scrollView: {
     flex: 1,
+  },
+  logo: {
+    width: 200,
+    height: 200,
+    margin: 20,
+  },
+  title: {
+    fontSize: 22,
+    marginVertical: 20,
+    color: Colors.text,
   },
   bodyText: {
     color: Colors.text,
   },
-  body: {
-    flex: 1,
-  },
   link: {
-    color: 'blue',
-    textDecorationColor: 'blue',
+    color: Colors.tint,
     textDecorationLine: 'underline',
     marginTop: 10,
   },
-  logo: {
-    width: 104,
-    height: 120,
-    marginRight: 20,
-    marginBottom: 20,
+  activityIndicator: {
+    marginVertical: 20,
   },
-  buttons: {
-    width: '100%',
-    paddingBottom: 20,
+  updateButton: {
+    margin: 10,
+    padding: 10,
+    backgroundColor: Colors.buttonBackground,
+    borderRadius: 4,
+    width: '90%',
+    alignItems: 'center',
+  },
+  updateButtonText: {
+    color: Colors.tint,
   },
 });

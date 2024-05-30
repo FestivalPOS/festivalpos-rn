@@ -37,9 +37,10 @@ const styles = StyleSheet.create({
     color: Colors.text,
   },
   button: {
-    backgroundColor: '#1E90FF',
+    backgroundColor: Colors.buttonBackground,
     padding: 10,
     margin: 10,
+    borderRadius: 4,
   },
   buttonText: {
     color: Colors.tint,
