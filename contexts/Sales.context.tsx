@@ -55,12 +55,12 @@ const configureBackgroundFetch = async () => {
             console.log("Background fetch is restricted on this device.");
             return;
         case BackgroundFetch.BackgroundFetchStatus.Available:
-            console.log("Background fetch is allowed and enabled.");
             await BackgroundFetch.registerTaskAsync(BACKGROUND_FETCH_TASK, {
                 minimumInterval: 30, // Fetch interval in minutes
                 stopOnTerminate: false,
                 startOnBoot: true
             });
+            console.log('Background task registered')
             break;
         default:
             console.log("Unknown status for background fetch");

@@ -13,6 +13,7 @@ import CheckoutScreen from '../screens/CheckoutScreen';
 import QRScannerScreen from '../screens/QRScannerScreen';
 import WelcomeScreen from '../screens/WelcomeScreen';
 import { useTranslation } from 'react-i18next';
+import { getTabBarIcon } from '../helpers/icons';
 
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -29,15 +30,15 @@ const NavigationComponent = () => {
     <Drawer.Navigator key={drawerKey} screenOptions={{headerTintColor: '#FFFFFF'}} initialRouteName={pos.url ? "POS" : "Welcome"}>
       {pos.url ? (
         <>
-          <Drawer.Screen name="POS" component={POSScreen} />
-          <Drawer.Screen name={t("nav.settings")} component={SettingsScreen} />
-          <Drawer.Screen name={t("nav.about")} component={AboutScreen} />
+          <Drawer.Screen name="POS" component={POSScreen} options={{drawerIcon: getTabBarIcon({ name: 'calculator-outline' })}} />
+          <Drawer.Screen name={t("nav.settings")} component={SettingsScreen} options={{drawerIcon: getTabBarIcon({ name: 'settings-outline' })}} />
+          <Drawer.Screen name={t("nav.about")} component={AboutScreen} options={{drawerIcon: getTabBarIcon({ name: 'information-circle-outline' })}} />
         </>
       ) : (
         <>
-          <Drawer.Screen name={t("nav.welcome")} component={WelcomeScreen} />
-          <Drawer.Screen name={t("nav.settings")} component={SettingsScreen} />
-          <Drawer.Screen name={t("nav.about")} component={AboutScreen} />
+          <Drawer.Screen name={t("nav.welcome")} component={WelcomeScreen} options={{drawerIcon: getTabBarIcon({ name: 'home-outline' })}} />
+          <Drawer.Screen name={t("nav.settings")} component={SettingsScreen} options={{drawerIcon: getTabBarIcon({ name: 'settings-outline' })}} />
+          <Drawer.Screen name={t("nav.about")} component={AboutScreen} options={{drawerIcon: getTabBarIcon({ name: 'information-circle-outline' })}} />
         </>
       )}
     </Drawer.Navigator>

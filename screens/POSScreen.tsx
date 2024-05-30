@@ -151,11 +151,11 @@ const styles = StyleSheet.create({
   },
   itemCountCircle: {
     position: 'absolute',
-    top: -12,
-    left: -12,
-    width: 24,
-    height: 24,
-    borderRadius: 12,
+    top: -16,
+    left: -16,
+    width: 32,
+    height: 32,
+    borderRadius: 16,
     backgroundColor: 'red',
     justifyContent: 'center',
     alignItems: 'center',
@@ -163,6 +163,7 @@ const styles = StyleSheet.create({
   itemCountText: {
     color: '#fff',
     fontWeight: 'bold',
+    fontSize: 14
   },
   noProductsText: {
     textAlign: 'center',
