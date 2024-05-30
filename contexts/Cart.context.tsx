@@ -3,7 +3,9 @@ import React, { createContext, useContext, useState, ReactNode } from 'react';
 // Structure of the cart context
 interface CartContextType {
   cart: { [productId: string]: number };
-  setCart: React.Dispatch<React.SetStateAction<{ [productId: string]: number }>>;
+  setCart: React.Dispatch<
+    React.SetStateAction<{ [productId: string]: number }>
+  >;
   resetCart: () => void;
 }
 

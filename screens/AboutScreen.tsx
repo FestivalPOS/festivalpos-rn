@@ -1,5 +1,5 @@
 // AboutScreen.tsx
-import React, { useState } from "react";
+import React, { useState } from 'react';
 import {
   View,
   Text,
@@ -11,21 +11,21 @@ import {
   Linking,
   Alert,
   Image,
-} from "react-native";
-import { useTranslation } from "react-i18next";
+} from 'react-native';
+import { useTranslation } from 'react-i18next';
 import {
   GITHUB_URL,
   PRIVACY_POLICY_URL,
   SCREEPER_URL,
   TERMS_AND_CONDITIONS_URL,
-} from "../constants/app";
-import { Colors } from "../constants/Colors";
+} from '../constants/app';
+import { Colors } from '../constants/Colors';
 import {
   checkForUpdateAsync,
   fetchUpdateAsync,
   reloadAsync,
-} from "expo-updates";
-import Toast from "react-native-toast-message";
+} from 'expo-updates';
+import Toast from 'react-native-toast-message';
 
 export default function AboutScreen() {
   const { t } = useTranslation();
@@ -40,25 +40,25 @@ export default function AboutScreen() {
       if (update.isAvailable) {
         await fetchUpdateAsync();
 
-        Alert.alert(t("app.updated.title"), t("app.updated.description"), [
+        Alert.alert(t('app.updated.title'), t('app.updated.description'), [
           {
-            text: t("ok"),
+            text: t('ok'),
             onPress: async () => reloadAsync(),
           },
         ]);
       } else {
         Toast.show({
-          text1: t("app.uptodate.title"),
-          text2: t("app.uptodate.description"),
+          text1: t('app.uptodate.title'),
+          text2: t('app.uptodate.description'),
         });
       }
     } catch (error) {
       console.error(error);
 
       Toast.show({
-        type: "error",
-        text1: t("app.update.error.title"),
-        text2: t("app.update.error.description"),
+        type: 'error',
+        text1: t('app.update.error.title'),
+        text2: t('app.update.error.description'),
       });
     } finally {
       setIsUpdating(false);
@@ -70,7 +70,7 @@ export default function AboutScreen() {
       <ScrollView style={styles.body}>
         <View style={styles.row}>
           <TouchableOpacity onPress={() => Linking.openURL(GITHUB_URL)}>
-            <Image style={styles.logo} source={require("../assets/logo.png")} />
+            <Image style={styles.logo} source={require('../assets/logo.png')} />
           </TouchableOpacity>
         </View>
         <View style={styles.row}>
@@ -97,7 +97,7 @@ export default function AboutScreen() {
       </ScrollView>
       <View style={styles.buttons}>
         {isUpdating ? (
-          <ActivityIndicator size={"small"} />
+          <ActivityIndicator size={'small'} />
         ) : (
           <Button onPress={checkForUpdates} title="Check for updates" />
         )}
@@ -107,11 +107,11 @@ export default function AboutScreen() {
 }
 
 const styles = StyleSheet.create({
-  row: { flexDirection: "row", flex: 1, flexWrap: "wrap", gap: 10 },
+  row: { flexDirection: 'row', flex: 1, flexWrap: 'wrap', gap: 10 },
   title: { fontSize: 22, color: Colors.text },
   container: {
     padding: 10,
-    alignItems: "flex-start",
+    alignItems: 'flex-start',
     gap: 10,
     flex: 1,
   },
@@ -122,9 +122,9 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   link: {
-    color: "blue",
-    textDecorationColor: "blue",
-    textDecorationLine: "underline",
+    color: 'blue',
+    textDecorationColor: 'blue',
+    textDecorationLine: 'underline',
     marginTop: 10,
   },
   logo: {
@@ -134,7 +134,7 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   buttons: {
-    width: "100%",
+    width: '100%',
     paddingBottom: 20,
   },
 });

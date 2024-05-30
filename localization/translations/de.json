@@ -1,59 +1,59 @@
 {
-    "language": "Deutsch",
-    "nav": {
-        "settings" : "Einstellungen",
-        "about" : "Info",
-        "welcome" : "Willkommen",
-        "checkout" : "Checkout",
-        "qrscanner" : "QR Scanner"
+  "language": "Deutsch",
+  "nav": {
+    "settings": "Einstellungen",
+    "about": "Info",
+    "welcome": "Willkommen",
+    "checkout": "Checkout",
+    "qrscanner": "QR Scanner"
+  },
+  "screens": {
+    "pos": {
+      "no_products_available": "Keine Produkte verfügbar",
+      "total": "Total",
+      "cash_in": "Einkassieren"
     },
-    "screens": {
-        "pos": {
-            "no_products_available": "Keine Produkte verfügbar",
-            "total": "Total",
-            "cash_in": "Einkassieren"
-        },
-        "about" : {
-            "title": "Info"
-        },
-        "checkout" : {
-            "total" : "Total",
-            "change" : "Wechselgeld",
-            "finalise" : "Abschliessen",
-            "cash" : "Bar",
-            "enter_amount_recieved": "Erhaltenen Betrag eingeben",
-            "calculate_change": "Wechselgeld berechnen"
-        },
-        "qrscanner" : {
-            "new_pos_loaded_successful" : "Neuer POS erfolgreich geladen",
-            "failed_to_load_pos" : "Fehler beim laden des POS",
-            "requesting_camera_permission" : "Beantragung der Kameraerlaubnis...",
-            "no_camera_access" : "Kein Zugang zur Kamera",
-            "processing" : "Verarbeitung...",
-            "close_scanner" : "Scanner schliessen"
-        },
-        "settings" : {
-            "scan_qr_first" : "Bitte scannen Sie zuerst einen FestivalPOS QR-Code",
-            "needed_for_pos_data" : "Dies wird benötigt, um Daten für das POS zu erhalten.",
-            "url_cannot_be_empty" : "URL darf nicht leer sein",
-            "pos_url_saved" : "POS URL erfolgreich gespeichert",
-            "pos_url_not_saved" : "POS URL konnte nicht gespeichert werden",
-            "products_refreshed" : "Produkte aktualisiert",
-            "products_not_refreshed" : "Produkte konnten nicht aktualisiert werden",
-            "current_pos" : "Aktueller POS",
-            "scan_qr_code" : "QR-Code scannen",
-            "refresh_products" : "Produkte aktualisieren",
-            "enter_url_manually": "URL manuell eingeben",
-            "save_url" : "URL speichern"
-        },
-        "welcome" : {
-            "welcome_to_festivalpos" : "Willkommen im FestivalPOS",
-            "go_to_qrscanner": "Gehe zum QR Scanner"
-        }
+    "about": {
+      "title": "Info"
     },
-    "errors" : {
-        "no_url_available": "Keine URL verfügbar",
-        "could_not_reach_server" : "Der Server konnte nicht erreicht werden.",
-        "validation_failed_for_fetched_data" : "Validierung der abgerufenen Daten fehlgeschlagen."
+    "checkout": {
+      "total": "Total",
+      "change": "Wechselgeld",
+      "finalise": "Abschliessen",
+      "cash": "Bar",
+      "enter_amount_recieved": "Erhaltenen Betrag eingeben",
+      "calculate_change": "Wechselgeld berechnen"
+    },
+    "qrscanner": {
+      "new_pos_loaded_successful": "Neuer POS erfolgreich geladen",
+      "failed_to_load_pos": "Fehler beim laden des POS",
+      "requesting_camera_permission": "Beantragung der Kameraerlaubnis...",
+      "no_camera_access": "Kein Zugang zur Kamera",
+      "processing": "Verarbeitung...",
+      "close_scanner": "Scanner schliessen"
+    },
+    "settings": {
+      "scan_qr_first": "Bitte scannen Sie zuerst einen FestivalPOS QR-Code",
+      "needed_for_pos_data": "Dies wird benötigt, um Daten für das POS zu erhalten.",
+      "url_cannot_be_empty": "URL darf nicht leer sein",
+      "pos_url_saved": "POS URL erfolgreich gespeichert",
+      "pos_url_not_saved": "POS URL konnte nicht gespeichert werden",
+      "products_refreshed": "Produkte aktualisiert",
+      "products_not_refreshed": "Produkte konnten nicht aktualisiert werden",
+      "current_pos": "Aktueller POS",
+      "scan_qr_code": "QR-Code scannen",
+      "refresh_products": "Produkte aktualisieren",
+      "enter_url_manually": "URL manuell eingeben",
+      "save_url": "URL speichern"
+    },
+    "welcome": {
+      "welcome_to_festivalpos": "Willkommen im FestivalPOS",
+      "go_to_qrscanner": "Gehe zum QR Scanner"
     }
+  },
+  "errors": {
+    "no_url_available": "Keine URL verfügbar",
+    "could_not_reach_server": "Der Server konnte nicht erreicht werden.",
+    "validation_failed_for_fetched_data": "Validierung der abgerufenen Daten fehlgeschlagen."
+  }
 }

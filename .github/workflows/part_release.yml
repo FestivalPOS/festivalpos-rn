@@ -1,0 +1,44 @@
+on:
+  workflow_call:
+    inputs:
+      releaseName:
+        required: true
+        type: string
+      stable:
+        required: false
+        type: boolean
+        default: false
+
+name: 'Release'
+
+jobs:
+  create_release:
+    name: Create Release
+
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: write
+
+    steps:
+      - name: Create prerelease
+        if: ${{ !inputs.stable }}
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: |
+          gh release create \
+            --repo ${{ github.repository }} \
+            --title ${{ inputs.releaseName }} \
+            --prerelease \
+            --generate-notes \
+            ${{ inputs.releaseName }}
+      - name: Create release
+        if: ${{ inputs.stable }}
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: |
+          gh release create \
+            --repo ${{ github.repository }} \
+            --title ${{ inputs.releaseName }} \
+            --generate-notes \
+            ${{ inputs.releaseName }}

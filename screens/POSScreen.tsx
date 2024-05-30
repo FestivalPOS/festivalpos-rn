@@ -1,5 +1,14 @@
 import React, { useEffect, useLayoutEffect } from 'react';
-import { View, Text, Pressable, StyleSheet, Dimensions, Image, ScrollView, ActivityIndicator } from 'react-native';
+import {
+  View,
+  Text,
+  Pressable,
+  StyleSheet,
+  Dimensions,
+  Image,
+  ScrollView,
+  ActivityIndicator,
+} from 'react-native';
 import { Colors } from '../constants/Colors';
 import { usePOS } from '../contexts/POS.context';
 import { useCart } from '../contexts/Cart.context';
@@ -15,9 +24,9 @@ const POSScreen = ({ navigation }) => {
 
   useLayoutEffect(() => {
     navigation.setOptions({
-      title: pos.name ? `POS  -  ${pos.name}` : 'POS'
+      title: pos.name ? `POS  -  ${pos.name}` : 'POS',
     });
-  }, [pos.name]); 
+  }, [pos.name]);
 
   const addToCart = (product) => {
     setCart((prevCart) => {
@@ -41,7 +50,7 @@ const POSScreen = ({ navigation }) => {
   const calculateTotal = () => {
     return Object.keys(cart).reduce((sum, productId) => {
       const product = pos.products.find((p) => p.id === productId);
-      return sum + ((product?.price ?? 0) * cart[productId]);
+      return sum + (product?.price ?? 0) * cart[productId];
     }, 0);
   };
 
@@ -51,11 +60,17 @@ const POSScreen = ({ navigation }) => {
         <View style={styles.activityIndicator}>
           <ActivityIndicator size="large" color={Colors.icon} />
         </View>
-      ) : (pos.products && pos.products.length > 0) ? (
+      ) : pos.products && pos.products.length > 0 ? (
         <ScrollView contentContainerStyle={styles.productContainer}>
           {pos.products.map((item) => (
             <View style={styles.productItem} key={item.id}>
-              <Pressable onPress={() => addToCart(item)} style={[styles.productSquare, { backgroundColor: item.tilecolor }]}>
+              <Pressable
+                onPress={() => addToCart(item)}
+                style={[
+                  styles.productSquare,
+                  { backgroundColor: item.tilecolor },
+                ]}
+              >
                 {item.imageLocal && (
                   <Image
                     source={{ uri: item.imageLocal }}
@@ -63,7 +78,8 @@ const POSScreen = ({ navigation }) => {
                   />
                 )}
                 <Text style={[styles.text, styles.productText]}>
-                  {item.name}{"\n"}CHF {item.price.toFixed(2)}
+                  {item.name}
+                  {'\n'}CHF {item.price.toFixed(2)}
                 </Text>
                 {cart[item.id] > 0 && (
                   <Pressable
@@ -79,12 +95,16 @@ const POSScreen = ({ navigation }) => {
         </ScrollView>
       ) : (
         <>
-          <Text style={styles.noProductsText}>{t('screens.pos.no_products_available')}</Text>
+          <Text style={styles.noProductsText}>
+            {t('screens.pos.no_products_available')}
+          </Text>
         </>
       )}
 
       <View style={styles.cartSummary}>
-        <Text style={styles.cartTotal}>{t('screens.pos.total')}: CHF {calculateTotal().toFixed(2)}</Text>
+        <Text style={styles.cartTotal}>
+          {t('screens.pos.total')}: CHF {calculateTotal().toFixed(2)}
+        </Text>
         <Pressable
           style={
             Object.keys(cart).length === 0
@@ -98,7 +118,9 @@ const POSScreen = ({ navigation }) => {
             style={styles.checkoutIcon}
             source={require('../assets/buyer-pay-icon.svg')}
           />
-          <Text style={styles.checkoutButtonText}>{t('screens.pos.cash_in')}</Text>
+          <Text style={styles.checkoutButtonText}>
+            {t('screens.pos.cash_in')}
+          </Text>
         </Pressable>
       </View>
     </View>
@@ -163,7 +185,7 @@ const styles = StyleSheet.create({
   itemCountText: {
     color: '#fff',
     fontWeight: 'bold',
-    fontSize: 14
+    fontSize: 14,
   },
   noProductsText: {
     textAlign: 'center',

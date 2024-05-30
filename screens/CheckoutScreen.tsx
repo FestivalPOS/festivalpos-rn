@@ -1,5 +1,13 @@
 import React, { useRef, useState, useEffect, MutableRefObject } from 'react';
-import { View, Text, Pressable, StyleSheet, TextInput, Modal, Dimensions } from 'react-native';
+import {
+  View,
+  Text,
+  Pressable,
+  StyleSheet,
+  TextInput,
+  Modal,
+  Dimensions,
+} from 'react-native';
 import { Colors } from '../constants/Colors';
 import { useCart } from '../contexts/Cart.context';
 import { useSales } from '../contexts/Sales.context';
@@ -14,7 +22,7 @@ const { width } = Dimensions.get('window');
 const CheckoutScreen = ({ route, navigation }) => {
   const { t } = useTranslation();
   const { cart, resetCart } = useCart();
-  const { addSale } = useSales()
+  const { addSale } = useSales();
   const { pos } = route.params;
 
   const [selectedPayment, setSelectedPayment] = useState(null);
@@ -22,12 +30,13 @@ const CheckoutScreen = ({ route, navigation }) => {
   const [givenAmount, setGivenAmount] = useState('');
   const [change, setChange] = useState(null);
 
-  const amountInput: MutableRefObject<TextInput | null> = useRef<TextInput>(null);
+  const amountInput: MutableRefObject<TextInput | null> =
+    useRef<TextInput>(null);
 
   const calculateTotal = () => {
     return Object.keys(cart).reduce((sum, productId) => {
       const product = pos.products.find((p) => p.id === productId);
-      return sum + (product.price * cart[productId]);
+      return sum + product.price * cart[productId];
     }, 0);
   };
 
@@ -48,12 +57,12 @@ const CheckoutScreen = ({ route, navigation }) => {
   };
 
   const handleFinish = async () => {
-    const saleData: Sale  = {
+    const saleData: Sale = {
       id: uuidv4(),
       vendorPointId: pos.id,
       saleDate: new Date(),
-      saleItems: Object.keys(cart).map(productId => {
-        const product = pos.products.find(p => p.id === productId);
+      saleItems: Object.keys(cart).map((productId) => {
+        const product = pos.products.find((p) => p.id === productId);
         return {
           productId: productId,
           quantity: cart[productId],
@@ -64,7 +73,7 @@ const CheckoutScreen = ({ route, navigation }) => {
 
     resetCart();
     navigation.navigate('POS');
-  
+
     const postUrl = pos.url.split('/pos')[0] + '/pos/sale';
 
     try {
@@ -72,7 +81,7 @@ const CheckoutScreen = ({ route, navigation }) => {
       resetCart();
       navigation.navigate('POS');
     } catch (error) {
-      console.info("Failed to post sale to API, saving to cache: ", error);
+      console.info('Failed to post sale to API, saving to cache: ', error);
       addSale(saleData, postUrl);
       resetCart();
       navigation.navigate('POS');
@@ -84,12 +93,16 @@ const CheckoutScreen = ({ route, navigation }) => {
   return (
     <View style={styles.container}>
       <View style={styles.summary}>
-        {Object.keys(cart).map(productId => {
-          const product = pos.products.find(p => p.id === productId);
+        {Object.keys(cart).map((productId) => {
+          const product = pos.products.find((p) => p.id === productId);
           return (
             <View key={product.id} style={styles.productItem}>
-              <Text style={styles.productText}>{cart[productId]} x {product.name}</Text>
-              <Text style={styles.productText}>CHF {(product.price * cart[productId]).toFixed(2)}</Text>
+              <Text style={styles.productText}>
+                {cart[productId]} x {product.name}
+              </Text>
+              <Text style={styles.productText}>
+                CHF {(product.price * cart[productId]).toFixed(2)}
+              </Text>
             </View>
           );
         })}
@@ -99,7 +112,9 @@ const CheckoutScreen = ({ route, navigation }) => {
         </View>
         {change !== null && (
           <View style={styles.productItem}>
-            <Text style={styles.changeText}>{t('screens.checkout.change')}:</Text>
+            <Text style={styles.changeText}>
+              {t('screens.checkout.change')}:
+            </Text>
             <Text style={styles.changeAmount}>CHF {change}</Text>
           </View>
         )}
@@ -108,25 +123,48 @@ const CheckoutScreen = ({ route, navigation }) => {
         {selectedPayment === null ? (
           <>
             <Pressable style={styles.finishButton} onPress={handleFinish}>
-              <Text style={styles.paymentButtonText}>{t('screens.checkout.finalise')}</Text>
+              <Text style={styles.paymentButtonText}>
+                {t('screens.checkout.finalise')}
+              </Text>
             </Pressable>
             {/* <Pressable style={styles.paymentButtonInactive} onPress={() => handlePayment('Twint')} disabled={true}>
               <Text style={styles.paymentButtonText}>Twint</Text>
             </Pressable> */}
-            <Pressable style={styles.paymentButton} onPress={() => handlePayment('Bar')}>
-              <Text style={styles.paymentButtonText}>{t('screens.checkout.cash')}</Text>
+            <Pressable
+              style={styles.paymentButton}
+              onPress={() => handlePayment('Bar')}
+            >
+              <Text style={styles.paymentButtonText}>
+                {t('screens.checkout.cash')}
+              </Text>
             </Pressable>
           </>
         ) : (
           <Pressable style={styles.finishButton} onPress={handleFinish}>
-            <Text style={styles.paymentButtonText}>{t('screens.checkout.finalise')}</Text>
+            <Text style={styles.paymentButtonText}>
+              {t('screens.checkout.finalise')}
+            </Text>
           </Pressable>
         )}
       </View>
-      <Modal visible={isModalVisible} transparent animationType="slide" onRequestClose={() => { setIsModalVisible(false) }} onShow={() => { setTimeout(() => { amountInput.current.focus() }, 100) }}>
+      <Modal
+        visible={isModalVisible}
+        transparent
+        animationType="slide"
+        onRequestClose={() => {
+          setIsModalVisible(false);
+        }}
+        onShow={() => {
+          setTimeout(() => {
+            amountInput.current.focus();
+          }, 100);
+        }}
+      >
         <View style={styles.modalContainer}>
           <View style={styles.modalContent}>
-            <Text style={styles.modalTitle}>{t('screens.checkout.enter_amount_recieved')}</Text>
+            <Text style={styles.modalTitle}>
+              {t('screens.checkout.enter_amount_recieved')}
+            </Text>
             <TextInput
               style={styles.input}
               inputMode="numeric"
@@ -137,8 +175,13 @@ const CheckoutScreen = ({ route, navigation }) => {
               autoFocus={false}
               ref={amountInput}
             />
-            <Pressable style={styles.calculateButton} onPress={handleCalculateChange}>
-              <Text style={styles.calculateButtonText}>{t('screens.checkout.calculate_change')}</Text>
+            <Pressable
+              style={styles.calculateButton}
+              onPress={handleCalculateChange}
+            >
+              <Text style={styles.calculateButtonText}>
+                {t('screens.checkout.calculate_change')}
+              </Text>
             </Pressable>
           </View>
         </View>

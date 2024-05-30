@@ -1,0 +1,7 @@
+/.expo/
+/node_modules/
+/dist/
+/compiled-lang/
+/web-build/
+/android/
+/ios/
