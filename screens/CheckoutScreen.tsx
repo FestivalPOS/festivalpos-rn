@@ -132,15 +132,18 @@ const CheckoutScreen = ({ route, navigation }) => {
             {/* <Pressable style={styles.paymentButtonInactive} onPress={() => handlePayment('Twint')} disabled={true}>
               <Text style={styles.paymentButtonText}>Twint</Text>
             </Pressable> */}
-            <Pressable
-              style={styles.paymentButton}
-              onPress={() => handlePayment('Bar')}
-            >
-              <Ionicons name="cash-outline" size={20} color="white" />
-              <Text style={styles.paymentButtonText}>
-                {t('screens.checkout.cash')}
-              </Text>
-            </Pressable>
+            {calculateTotal() > 0 && (
+              <Pressable
+                style={styles.paymentButton}
+                onPress={() => handlePayment('Bar')}
+                disabled={calculateTotal() <= 0}
+              >
+                <Ionicons name="cash-outline" size={20} color="white" />
+                <Text style={styles.paymentButtonText}>
+                  {t('screens.checkout.cash')}
+                </Text>
+              </Pressable>
+            )}
           </>
         ) : (
           <Pressable style={styles.finishButton} onPress={handleFinish}>

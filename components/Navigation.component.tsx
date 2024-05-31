@@ -1,7 +1,7 @@
 import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import { createDrawerNavigator } from '@react-navigation/drawer';
+import { DrawerContentScrollView, DrawerItem, DrawerItemList, createDrawerNavigator } from '@react-navigation/drawer';
 import { DarkTheme } from '@react-navigation/native';
 import { usePOS } from '../contexts/POS.context';
 
@@ -15,7 +15,7 @@ import WelcomeScreen from '../screens/WelcomeScreen';
 import { useTranslation } from 'react-i18next';
 import { getTabBarIcon } from '../helpers/icons';
 import BrandedDrawerContent from './BrandedDrawer.component';
-import { Platform } from 'react-native';
+import { Platform, View } from 'react-native';
 import { createURL } from 'expo-linking';
 
 const Stack = createStackNavigator();
@@ -32,8 +32,8 @@ const NavigationComponent = () => {
     <Drawer.Navigator
       key={drawerKey}
       screenOptions={{ headerTintColor: '#FFFFFF' }}
-      initialRouteName={pos.url ? 'POS' : 'Welcome'}
-      drawerContent={(props) => <BrandedDrawerContent {...props} />}
+      initialRouteName={pos.url ? 'pos' : 'welcome'}
+      drawerContent={(props) => <BrandedDrawerContent {...props} showLogoutButton={!!pos.url} />}
     >
       {pos.url ? (
         <>

@@ -43,16 +43,23 @@ export default function AboutScreen() {
         ]);
       } else {
         Toast.show({
+          type: 'info',
           text1: t('app.uptodate.title'),
           text2: t('app.uptodate.description'),
+          position: 'bottom',
+          visibilityTime: 2000,
+          bottomOffset: 45
         });
       }
     } catch (error) {
       console.error(error);
       Toast.show({
         type: 'error',
+        position: 'bottom',
         text1: t('app.update.error.title'),
         text2: t('app.update.error.description'),
+        visibilityTime: 2000,
+        bottomOffset: 45
       });
     } finally {
       setIsUpdating(false);

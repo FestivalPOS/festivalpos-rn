@@ -52,6 +52,14 @@ export const POSProvider: React.FC<POSProviderProps> = ({ children }) => {
     setPOS(data);
   };
 
+  const logoutPOS = async () => {
+    pos.id = ''
+    pos.url = ''
+    pos.name = ''
+    pos.products = []
+    await AsyncStorage.removeItem('pos');
+  }
+
   const fetchNewPOSData = async (currentPos: POSData) => {
     if (!currentPos.url) {
       console.log('No POS URL available, cannot fetch data');
@@ -106,7 +114,7 @@ export const POSProvider: React.FC<POSProviderProps> = ({ children }) => {
   };
 
   return (
-    <POSContext.Provider value={{ pos, loading, updateURL, refreshProducts }}>
+    <POSContext.Provider value={{ pos, loading, updateURL, refreshProducts, logoutPOS }}>
       {children}
     </POSContext.Provider>
   );
