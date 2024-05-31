@@ -12,6 +12,7 @@ import { Colors } from '../constants/Colors';
 import Toast from 'react-native-toast-message';
 import { usePOS } from '../contexts/POS.context';
 import { useTranslation } from 'react-i18next';
+import Ionicons from '@expo/vector-icons/Ionicons';
 
 const SettingsScreen = ({ navigation }) => {
   const { pos, loading, updateURL, refreshProducts } = usePOS(); // Use updateURL from context
@@ -68,7 +69,7 @@ const SettingsScreen = ({ navigation }) => {
         text1: t('screens.settings.products_refreshed'),
         position: 'bottom',
       });
-      navigation.navigate('POS');
+      navigation.navigate('home', { screen: 'pos' });
     } catch (error) {
       Toast.show({
         type: 'error',
@@ -97,12 +98,14 @@ const SettingsScreen = ({ navigation }) => {
               style={styles.button}
               onPress={() => navigation.navigate('qr-scanner')}
             >
+              <Ionicons name="qr-code-outline" size={20} color="white" />
               <Text style={styles.buttonText}>
                 {t('screens.settings.scan_qr_code')}
               </Text>
             </Pressable>
             {pos.name.length > 0 && (
               <Pressable style={styles.button} onPress={reloadProducts}>
+                <Ionicons name="refresh-outline" size={20} color="white" />
                 <Text style={styles.buttonText}>
                   {t('screens.settings.refresh_products')}
                 </Text>
@@ -140,6 +143,10 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.background,
   },
   box: {
+    width: '100%',
+    maxWidth: '100%',
+    height: 'auto',
+    flexWrap: 'wrap',
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
@@ -161,14 +168,21 @@ const styles = StyleSheet.create({
     color: Colors.text,
   },
   button: {
-    backgroundColor: Colors.tint,
-    padding: 10,
-    margin: 10,
-    borderRadius: 10,
+    flex: 1,
+    minWidth: 180,
+    padding: 12,
+    margin: 4,
+    borderWidth: 1,
+    borderColor: Colors.text,
+    borderRadius: 4,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   buttonText: {
-    color: Colors.background,
+    color: Colors.text,
     textAlign: 'center',
+    marginLeft: 10,
   },
 });
 

@@ -26,6 +26,7 @@ import {
   reloadAsync,
 } from 'expo-updates';
 import Toast from 'react-native-toast-message';
+import Ionicons from '@expo/vector-icons/Ionicons';
 
 export default function AboutScreen() {
   const { t } = useTranslation();
@@ -61,9 +62,11 @@ export default function AboutScreen() {
   return (
     <View style={styles.container}>
       <ScrollView style={styles.scrollView}>
-        <Pressable onPress={() => Linking.openURL(GITHUB_URL)}>
-          <Image style={styles.logo} source={require('../assets/logo.png')} />
-        </Pressable>
+        <View style={styles.logoContainer}>
+          <Pressable onPress={() => Linking.openURL(GITHUB_URL)}>
+            <Image style={styles.logo} source={require('../assets/logo.png')} />
+          </Pressable>
+        </View>
         <Text style={styles.title}>FestivalPOS</Text>
         <Text style={styles.bodyText}>
           FestivalPOS was built for supporting the points of sale of the Aufgetischt St.Gallen and
@@ -88,8 +91,9 @@ export default function AboutScreen() {
         size="small"
       />
       {Platform.OS !== 'web' && (
-        <View>
+        <View style={styles.buttonContainer}>
           <Pressable onPress={checkForUpdates} style={styles.updateButton}>
+            <Ionicons name="cloud-download-outline" size={20} color="white" />
             <Text style={styles.updateButtonText}>Check for updates</Text>
           </Pressable>
         </View>
@@ -104,6 +108,11 @@ const styles = StyleSheet.create({
     padding: 40,
     alignItems: 'flex-start',
     backgroundColor: Colors.background,
+  },
+  logoContainer: {
+    width: '100%',
+    maxWidth: 500,
+    alignItems: 'center'
   },
   scrollView: {
     flex: 1,
@@ -130,15 +139,23 @@ const styles = StyleSheet.create({
   activityIndicator: {
     marginVertical: 20,
   },
+  buttonContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    paddingVertical: 16,
+  },
   updateButton: {
-    margin: 10,
-    padding: 10,
-    backgroundColor: Colors.buttonBackground,
+    flex: 1,
+    padding: 12,
+    margin: 4,
+    backgroundColor: 'darkgreen',
     borderRadius: 4,
-    width: '90%',
+    flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'center',
   },
   updateButtonText: {
     color: Colors.tint,
+    marginLeft: 10
   },
 });

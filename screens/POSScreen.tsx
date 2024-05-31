@@ -13,6 +13,7 @@ import { Colors } from '../constants/Colors';
 import { usePOS } from '../contexts/POS.context';
 import { useCart } from '../contexts/Cart.context';
 import { useTranslation } from 'react-i18next';
+import Ionicons from '@expo/vector-icons/Ionicons';
 
 const { width, height } = Dimensions.get('window');
 const maxTileSize = Math.min(width / 4, height / 3, 200);
@@ -114,10 +115,11 @@ const POSScreen = ({ navigation }) => {
           onPress={() => navigation.navigate('checkout', { pos })}
           disabled={Object.keys(cart).length === 0}
         >
-          <Image
+          {/* <Image
             style={styles.checkoutIcon}
             source={require('../assets/buyer-pay-icon.svg')}
-          />
+          /> */}
+          <Ionicons name="wallet-outline" size={20} color="white" />
           <Text style={styles.checkoutButtonText}>
             {t('screens.pos.cash_in')}
           </Text>
@@ -213,7 +215,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: 'darkgreen',
-    borderRadius: 25,
+    borderRadius: 4,
     paddingVertical: 10,
     paddingHorizontal: 20,
   },
@@ -222,7 +224,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: '#222',
-    borderRadius: 25,
+    borderRadius: 4,
     paddingVertical: 10,
     paddingHorizontal: 20,
   },

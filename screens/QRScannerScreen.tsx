@@ -11,6 +11,7 @@ import Toast from 'react-native-toast-message';
 import { Colors } from '../constants/Colors';
 import { usePOS } from '../contexts/POS.context';
 import { useTranslation } from 'react-i18next';
+import Ionicons from '@expo/vector-icons/Ionicons';
 
 const QRScannerScreen = ({ navigation }) => {
   const { pos, updateURL } = usePOS();
@@ -35,7 +36,7 @@ const QRScannerScreen = ({ navigation }) => {
         text1: t('screens.qrscanner.new_pos_loaded_successful'),
         position: 'bottom',
       });
-      navigation.navigate('Home', {
+      navigation.navigate('home', {
         screen: 'pos',
       });
     } catch (error) {
@@ -82,6 +83,7 @@ const QRScannerScreen = ({ navigation }) => {
       >
         <View style={styles.cameraContent}>
           <Pressable style={styles.button} onPress={() => navigation.goBack()}>
+            <Ionicons name="close-circle-outline" size={20} color="white" />
             <Text style={styles.buttonText}>
               {t('screens.qrscanner.close_scanner')}
             </Text>
@@ -112,13 +114,17 @@ const styles = StyleSheet.create({
     bottom: 20,
   },
   button: {
-    backgroundColor: Colors.tint,
-    padding: 10,
-    borderRadius: 10,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#121212',
+    padding: 12,
+    borderRadius: 4,
   },
   buttonText: {
-    color: Colors.background,
+    color: Colors.tint,
     fontSize: 16,
+    marginLeft: 10
   },
   centeredView: {
     flex: 1,

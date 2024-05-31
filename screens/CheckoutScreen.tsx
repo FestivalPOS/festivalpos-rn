@@ -16,6 +16,7 @@ import 'react-native-get-random-values';
 import { v4 as uuidv4 } from 'uuid';
 import { postSale } from '../services/api';
 import { useTranslation } from 'react-i18next';
+import Ionicons from '@expo/vector-icons/Ionicons';
 
 const { width } = Dimensions.get('window');
 
@@ -123,6 +124,7 @@ const CheckoutScreen = ({ route, navigation }) => {
         {selectedPayment === null ? (
           <>
             <Pressable style={styles.finishButton} onPress={handleFinish}>
+              <Ionicons name="checkmark-circle-outline" size={20} color="white" />
               <Text style={styles.paymentButtonText}>
                 {t('screens.checkout.finalise')}
               </Text>
@@ -134,6 +136,7 @@ const CheckoutScreen = ({ route, navigation }) => {
               style={styles.paymentButton}
               onPress={() => handlePayment('Bar')}
             >
+              <Ionicons name="cash-outline" size={20} color="white" />
               <Text style={styles.paymentButtonText}>
                 {t('screens.checkout.cash')}
               </Text>
@@ -141,6 +144,7 @@ const CheckoutScreen = ({ route, navigation }) => {
           </>
         ) : (
           <Pressable style={styles.finishButton} onPress={handleFinish}>
+            <Ionicons name="checkmark-circle-outline" size={20} color="white" />
             <Text style={styles.paymentButtonText}>
               {t('screens.checkout.finalise')}
             </Text>
@@ -179,6 +183,7 @@ const CheckoutScreen = ({ route, navigation }) => {
               style={styles.calculateButton}
               onPress={handleCalculateChange}
             >
+              <Ionicons name="calculator-outline" size={20} color="white" />
               <Text style={styles.calculateButtonText}>
                 {t('screens.checkout.calculate_change')}
               </Text>
@@ -253,6 +258,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: Colors.text,
     borderRadius: 4,
+    flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -263,6 +269,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#333333',
     borderRadius: 4,
+    flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -272,12 +279,17 @@ const styles = StyleSheet.create({
     margin: 4,
     backgroundColor: 'darkgreen',
     borderRadius: 4,
+    flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
   },
   paymentButtonText: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
     color: Colors.text,
     fontWeight: 'bold',
+    marginLeft: 10
   },
   modalContainer: {
     flex: 1,
@@ -307,14 +319,17 @@ const styles = StyleSheet.create({
     color: Colors.text,
   },
   calculateButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
     padding: 12,
     backgroundColor: 'darkgreen',
     borderRadius: 4,
-    alignItems: 'center',
   },
   calculateButtonText: {
     color: '#fff',
     fontWeight: 'bold',
+    marginLeft: 10
   },
 });
 
