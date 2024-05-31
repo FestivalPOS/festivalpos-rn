@@ -48,7 +48,7 @@ export default function AboutScreen() {
           text2: t('app.uptodate.description'),
           position: 'bottom',
           visibilityTime: 2000,
-          bottomOffset: 45
+          bottomOffset: 45,
         });
       }
     } catch (error) {
@@ -59,7 +59,7 @@ export default function AboutScreen() {
         text1: t('app.update.error.title'),
         text2: t('app.update.error.description'),
         visibilityTime: 2000,
-        bottomOffset: 45
+        bottomOffset: 45,
       });
     } finally {
       setIsUpdating(false);
@@ -76,8 +76,8 @@ export default function AboutScreen() {
         </View>
         <Text style={styles.title}>FestivalPOS</Text>
         <Text style={styles.bodyText}>
-          FestivalPOS was built for supporting the points of sale of the Aufgetischt St.Gallen and
-          Buskers Chur Festivals by @screeper.
+          FestivalPOS was built for supporting the points of sale of the
+          Aufgetischt St.Gallen and Buskers Chur Festivals by @screeper.
         </Text>
         <Pressable onPress={() => Linking.openURL(GITHUB_URL)}>
           <Text style={styles.link}>FestivalPOS GitHub page</Text>
@@ -119,7 +119,7 @@ const styles = StyleSheet.create({
   logoContainer: {
     width: '100%',
     maxWidth: 500,
-    alignItems: 'center'
+    alignItems: 'center',
   },
   scrollView: {
     flex: 1,
@@ -136,7 +136,7 @@ const styles = StyleSheet.create({
   },
   bodyText: {
     color: Colors.text,
-    marginBottom: 20
+    marginBottom: 20,
   },
   link: {
     color: Colors.tint,
@@ -163,6 +163,6 @@ const styles = StyleSheet.create({
   },
   updateButtonText: {
     color: Colors.tint,
-    marginLeft: 10
+    marginLeft: 10,
   },
 });

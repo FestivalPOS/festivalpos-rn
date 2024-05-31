@@ -32,7 +32,7 @@ const SettingsScreen = ({ navigation }) => {
         text2: t('screens.settings.needed_for_pos_data'),
         position: 'bottom',
         visibilityTime: 2000,
-        bottomOffset: 90
+        bottomOffset: 90,
       });
     }
   }, [pos.url]);
@@ -44,7 +44,7 @@ const SettingsScreen = ({ navigation }) => {
         text1: t('screens.settings.url_cannot_be_empty'),
         position: 'bottom',
         visibilityTime: 2000,
-        bottomOffset: 90
+        bottomOffset: 90,
       });
       return;
     }
@@ -56,7 +56,7 @@ const SettingsScreen = ({ navigation }) => {
         text1: t('screens.settings.pos_url_saved'),
         position: 'bottom',
         visibilityTime: 2000,
-        bottomOffset: 90
+        bottomOffset: 90,
       });
       resetCart();
       navigation.navigate('POS');
@@ -67,7 +67,7 @@ const SettingsScreen = ({ navigation }) => {
         text2: t(error.message),
         position: 'bottom',
         visibilityTime: 2000,
-        bottomOffset: 90
+        bottomOffset: 90,
       });
     }
   };
@@ -80,8 +80,7 @@ const SettingsScreen = ({ navigation }) => {
         text1: t('screens.settings.products_refreshed'),
         position: 'bottom',
         visibilityTime: 2000,
-        bottomOffset: 90
-        
+        bottomOffset: 90,
       });
       resetCart();
       navigation.navigate('home', { screen: 'pos' });
@@ -92,7 +91,7 @@ const SettingsScreen = ({ navigation }) => {
         text2: t(error.message),
         position: 'bottom',
         visibilityTime: 2000,
-        bottomOffset: 90
+        bottomOffset: 90,
       });
     }
   };

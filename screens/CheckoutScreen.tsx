@@ -124,7 +124,11 @@ const CheckoutScreen = ({ route, navigation }) => {
         {selectedPayment === null ? (
           <>
             <Pressable style={styles.finishButton} onPress={handleFinish}>
-              <Ionicons name="checkmark-circle-outline" size={20} color="white" />
+              <Ionicons
+                name="checkmark-circle-outline"
+                size={20}
+                color="white"
+              />
               <Text style={styles.paymentButtonText}>
                 {t('screens.checkout.finalise')}
               </Text>
@@ -292,7 +296,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     color: Colors.text,
     fontWeight: 'bold',
-    marginLeft: 10
+    marginLeft: 10,
   },
   modalContainer: {
     flex: 1,
@@ -332,7 +336,7 @@ const styles = StyleSheet.create({
   calculateButtonText: {
     color: '#fff',
     fontWeight: 'bold',
-    marginLeft: 10
+    marginLeft: 10,
   },
 });
 

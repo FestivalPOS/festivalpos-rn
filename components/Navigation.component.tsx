@@ -1,7 +1,12 @@
 import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import { DrawerContentScrollView, DrawerItem, DrawerItemList, createDrawerNavigator } from '@react-navigation/drawer';
+import {
+  DrawerContentScrollView,
+  DrawerItem,
+  DrawerItemList,
+  createDrawerNavigator,
+} from '@react-navigation/drawer';
 import { DarkTheme } from '@react-navigation/native';
 import { usePOS } from '../contexts/POS.context';
 
@@ -33,7 +38,9 @@ const NavigationComponent = () => {
       key={drawerKey}
       screenOptions={{ headerTintColor: '#FFFFFF' }}
       initialRouteName={pos.url ? 'pos' : 'welcome'}
-      drawerContent={(props) => <BrandedDrawerContent {...props} showLogoutButton={!!pos.url} />}
+      drawerContent={(props) => (
+        <BrandedDrawerContent {...props} showLogoutButton={!!pos.url} />
+      )}
     >
       {pos.url ? (
         <>

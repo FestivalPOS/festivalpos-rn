@@ -1,19 +1,19 @@
 {
   "language": "English",
-  "app" : {
-    "updated" : {
-      "title" : "App has been successfully updated",
-      "description" : "The app has been updated to the latest version. The app will now restart."
+  "app": {
+    "updated": {
+      "title": "App has been successfully updated",
+      "description": "The app has been updated to the latest version. The app will now restart."
     },
-    "update" : {
+    "update": {
       "error": {
-        "title" : "Update Error",
-        "description" :  "An error occurred while checking for updates."
+        "title": "Update Error",
+        "description": "An error occurred while checking for updates."
       }
     },
-    "uptodate" : {
-      "title" : "Up to date",
-      "description" : "You already have the latest version of the app."
+    "uptodate": {
+      "title": "Up to date",
+      "description": "You already have the latest version of the app."
     }
   },
   "nav": {

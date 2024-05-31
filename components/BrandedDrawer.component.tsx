@@ -12,11 +12,12 @@ import { useTranslation } from 'react-i18next';
 import { useCart } from '../contexts/Cart.context';
 
 export default function BrandedDrawerContent(
-  props: DrawerContentComponentProps & { children?: JSX.Element } & { showLogoutButton?: boolean },
+  props: DrawerContentComponentProps & { children?: JSX.Element } & {
+    showLogoutButton?: boolean;
+  },
 ) {
-  
   const { logoutPOS } = usePOS();
-  const { resetCart } = useCart()
+  const { resetCart } = useCart();
   const { t } = useTranslation();
 
   return (
@@ -29,15 +30,14 @@ export default function BrandedDrawerContent(
       {props.showLogoutButton && (
         <View style={{ flex: 1, justifyContent: 'flex-end' }}>
           <DrawerItem
-            label={t('nav.logout')} 
+            label={t('nav.logout')}
             onPress={() => {
               logoutPOS();
               resetCart();
-              props.navigation.navigate('home', {screen: 'welcome'})
+              props.navigation.navigate('home', { screen: 'welcome' });
             }}
-            icon= {getTabBarIcon({ name: 'log-out-outline' })}
-            
-            inactiveBackgroundColor='#301515'
+            icon={getTabBarIcon({ name: 'log-out-outline' })}
+            inactiveBackgroundColor="#301515"
           />
         </View>
       )}

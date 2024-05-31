@@ -38,7 +38,7 @@ const QRScannerScreen = ({ navigation }) => {
         text1: t('screens.qrscanner.new_pos_loaded_successful'),
         position: 'bottom',
         visibilityTime: 2000,
-        bottomOffset: 90
+        bottomOffset: 90,
       });
       resetCart();
       navigation.navigate('home', {
@@ -51,7 +51,7 @@ const QRScannerScreen = ({ navigation }) => {
         text2: error.message,
         position: 'bottom',
         visibilityTime: 2000,
-        bottomOffset: 90
+        bottomOffset: 90,
       });
       navigation.goBack();
     } finally {
@@ -131,7 +131,7 @@ const styles = StyleSheet.create({
   buttonText: {
     color: Colors.tint,
     fontSize: 16,
-    marginLeft: 10
+    marginLeft: 10,
   },
   centeredView: {
     flex: 1,
