@@ -13,10 +13,12 @@ import Toast from 'react-native-toast-message';
 import { usePOS } from '../contexts/POS.context';
 import { useTranslation } from 'react-i18next';
 import Ionicons from '@expo/vector-icons/Ionicons';
+import { useCart } from '../contexts/Cart.context';
 
 const SettingsScreen = ({ navigation }) => {
   const { pos, loading, updateURL, refreshProducts } = usePOS(); // Use updateURL from context
   const [url, setUrl] = useState(pos.url); // State to hold URL input
+  const { resetCart } = useCart();
   const { t } = useTranslation();
 
   useEffect(() => {
@@ -29,6 +31,8 @@ const SettingsScreen = ({ navigation }) => {
         text1: t('screens.settings.scan_qr_first'),
         text2: t('screens.settings.needed_for_pos_data'),
         position: 'bottom',
+        visibilityTime: 2000,
+        bottomOffset: 90,
       });
     }
   }, [pos.url]);
@@ -39,6 +43,8 @@ const SettingsScreen = ({ navigation }) => {
         type: 'error',
         text1: t('screens.settings.url_cannot_be_empty'),
         position: 'bottom',
+        visibilityTime: 2000,
+        bottomOffset: 90,
       });
       return;
     }
@@ -49,7 +55,10 @@ const SettingsScreen = ({ navigation }) => {
         type: 'success',
         text1: t('screens.settings.pos_url_saved'),
         position: 'bottom',
+        visibilityTime: 2000,
+        bottomOffset: 90,
       });
+      resetCart();
       navigation.navigate('POS');
     } catch (error) {
       Toast.show({
@@ -57,6 +66,8 @@ const SettingsScreen = ({ navigation }) => {
         text1: t('screens.settings.pos_url_not_saved'),
         text2: t(error.message),
         position: 'bottom',
+        visibilityTime: 2000,
+        bottomOffset: 90,
       });
     }
   };
@@ -68,7 +79,10 @@ const SettingsScreen = ({ navigation }) => {
         type: 'success',
         text1: t('screens.settings.products_refreshed'),
         position: 'bottom',
+        visibilityTime: 2000,
+        bottomOffset: 90,
       });
+      resetCart();
       navigation.navigate('home', { screen: 'pos' });
     } catch (error) {
       Toast.show({
@@ -76,6 +90,8 @@ const SettingsScreen = ({ navigation }) => {
         text1: t('screens.settings.products_not_refreshed'),
         text2: t(error.message),
         position: 'bottom',
+        visibilityTime: 2000,
+        bottomOffset: 90,
       });
     }
   };

@@ -124,7 +124,11 @@ const CheckoutScreen = ({ route, navigation }) => {
         {selectedPayment === null ? (
           <>
             <Pressable style={styles.finishButton} onPress={handleFinish}>
-              <Ionicons name="checkmark-circle-outline" size={20} color="white" />
+              <Ionicons
+                name="checkmark-circle-outline"
+                size={20}
+                color="white"
+              />
               <Text style={styles.paymentButtonText}>
                 {t('screens.checkout.finalise')}
               </Text>
@@ -132,15 +136,18 @@ const CheckoutScreen = ({ route, navigation }) => {
             {/* <Pressable style={styles.paymentButtonInactive} onPress={() => handlePayment('Twint')} disabled={true}>
               <Text style={styles.paymentButtonText}>Twint</Text>
             </Pressable> */}
-            <Pressable
-              style={styles.paymentButton}
-              onPress={() => handlePayment('Bar')}
-            >
-              <Ionicons name="cash-outline" size={20} color="white" />
-              <Text style={styles.paymentButtonText}>
-                {t('screens.checkout.cash')}
-              </Text>
-            </Pressable>
+            {calculateTotal() > 0 && (
+              <Pressable
+                style={styles.paymentButton}
+                onPress={() => handlePayment('Bar')}
+                disabled={calculateTotal() <= 0}
+              >
+                <Ionicons name="cash-outline" size={20} color="white" />
+                <Text style={styles.paymentButtonText}>
+                  {t('screens.checkout.cash')}
+                </Text>
+              </Pressable>
+            )}
           </>
         ) : (
           <Pressable style={styles.finishButton} onPress={handleFinish}>
@@ -289,7 +296,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     color: Colors.text,
     fontWeight: 'bold',
-    marginLeft: 10
+    marginLeft: 10,
   },
   modalContainer: {
     flex: 1,
@@ -329,7 +336,7 @@ const styles = StyleSheet.create({
   calculateButtonText: {
     color: '#fff',
     fontWeight: 'bold',
-    marginLeft: 10
+    marginLeft: 10,
   },
 });
 

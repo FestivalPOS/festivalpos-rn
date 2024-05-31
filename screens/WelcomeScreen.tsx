@@ -2,6 +2,7 @@ import React from 'react';
 import { View, Text, StyleSheet, Pressable } from 'react-native';
 import { Colors } from '../constants/Colors';
 import { useTranslation } from 'react-i18next';
+import Ionicons from '@expo/vector-icons/Ionicons';
 
 const WelcomeScreen = ({ navigation }) => {
   const { t } = useTranslation();
@@ -15,6 +16,7 @@ const WelcomeScreen = ({ navigation }) => {
         onPress={() => navigation.navigate('qr-scanner')}
         style={styles.button}
       >
+        <Ionicons name="qr-code-outline" size={20} color="white" />
         <Text style={styles.buttonText}>
           {t('screens.welcome.go_to_qrscanner')}
         </Text>
@@ -37,13 +39,18 @@ const styles = StyleSheet.create({
     color: Colors.text,
   },
   button: {
-    backgroundColor: Colors.buttonBackground,
-    padding: 10,
-    margin: 10,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: 'darkgreen',
     borderRadius: 4,
+    paddingVertical: 10,
+    paddingHorizontal: 20,
   },
   buttonText: {
     color: Colors.tint,
+    marginLeft: 10,
+    fontWeight: 'bold',
   },
 });
 

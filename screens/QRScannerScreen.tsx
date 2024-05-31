@@ -12,12 +12,14 @@ import { Colors } from '../constants/Colors';
 import { usePOS } from '../contexts/POS.context';
 import { useTranslation } from 'react-i18next';
 import Ionicons from '@expo/vector-icons/Ionicons';
+import { useCart } from '../contexts/Cart.context';
 
 const QRScannerScreen = ({ navigation }) => {
   const { pos, updateURL } = usePOS();
   const { t } = useTranslation();
   const [hasPermission, setHasPermission] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
+  const { resetCart } = useCart();
 
   useEffect(() => {
     (async () => {
@@ -35,7 +37,10 @@ const QRScannerScreen = ({ navigation }) => {
         type: 'success',
         text1: t('screens.qrscanner.new_pos_loaded_successful'),
         position: 'bottom',
+        visibilityTime: 2000,
+        bottomOffset: 90,
       });
+      resetCart();
       navigation.navigate('home', {
         screen: 'pos',
       });
@@ -45,6 +50,8 @@ const QRScannerScreen = ({ navigation }) => {
         text1: t('screens.qrscanner.failed_to_load_pos'),
         text2: error.message,
         position: 'bottom',
+        visibilityTime: 2000,
+        bottomOffset: 90,
       });
       navigation.goBack();
     } finally {
@@ -124,7 +131,7 @@ const styles = StyleSheet.create({
   buttonText: {
     color: Colors.tint,
     fontSize: 16,
-    marginLeft: 10
+    marginLeft: 10,
   },
   centeredView: {
     flex: 1,

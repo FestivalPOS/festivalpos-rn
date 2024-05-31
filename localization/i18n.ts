@@ -15,13 +15,14 @@ const languageDetector: LanguageDetectorAsyncModule = {
         .find((tag) => tag in allTranslations);
       console.log(language);
       if (language) {
-        return callback(language);
+        callback(language);
       } else {
         //if language was not found use german
-        return callback('de');
+        callback('de');
       }
     } catch (error) {
       console.log('Error reading language', error);
+      callback('de'); // fallback to German in case of error
     }
   },
   init: () => {},

@@ -12,4 +12,5 @@ export interface POSContextType {
   loading: boolean;
   updateURL: (newURL: string) => Promise<void>;
   refreshProducts: () => Promise<void>;
+  logoutPOS: () => Promise<void>;
 }

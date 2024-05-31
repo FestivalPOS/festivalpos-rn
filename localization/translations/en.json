@@ -1,11 +1,28 @@
 {
   "language": "English",
+  "app": {
+    "updated": {
+      "title": "App has been successfully updated",
+      "description": "The app has been updated to the latest version. The app will now restart."
+    },
+    "update": {
+      "error": {
+        "title": "Update Error",
+        "description": "An error occurred while checking for updates."
+      }
+    },
+    "uptodate": {
+      "title": "Up to date",
+      "description": "You already have the latest version of the app."
+    }
+  },
   "nav": {
     "settings": "Settings",
     "about": "About",
     "welcome": "Welcome",
     "checkout": "Checkout",
-    "qrscanner": "QR Scanner"
+    "qrscanner": "QR Scanner",
+    "logout": "Close POS"
   },
   "screens": {
     "pos": {

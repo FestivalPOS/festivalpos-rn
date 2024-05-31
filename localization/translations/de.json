@@ -1,11 +1,28 @@
 {
   "language": "Deutsch",
+  "app": {
+    "updated": {
+      "title": "App wurde erfolgreich aktualisiert",
+      "description": "Die App wurde auf die neuste Version aktualisiert. Sie wird jetzt neu gestartet."
+    },
+    "update": {
+      "error": {
+        "title": "Update Fehler",
+        "description": "Beim prüfen auf Updates trat ein Fehler auf."
+      }
+    },
+    "uptodate": {
+      "title": "App ist aktuell",
+      "description": "Die App ist schon auf der aktuellsten Version."
+    }
+  },
   "nav": {
     "settings": "Einstellungen",
     "about": "Info",
     "welcome": "Willkommen",
     "checkout": "Checkout",
-    "qrscanner": "QR Scanner"
+    "qrscanner": "QR Scanner",
+    "logout": "POS schliessen"
   },
   "screens": {
     "pos": {
