@@ -4,7 +4,7 @@
     "slug": "festivalpos-rn",
     "scheme": "festival-pos",
     "owner": "festival-pos",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "githubUrl": "https://github.com/FestivalPOS/festivalpos-rn",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
