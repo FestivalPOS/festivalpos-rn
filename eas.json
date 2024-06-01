@@ -6,7 +6,6 @@
   "build": {
     "development": {
       "distribution": "internal",
-      "channel": "main",
       "autoIncrement": true
     },
     "production": {
