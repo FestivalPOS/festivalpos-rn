@@ -12,7 +12,11 @@
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#151718"
+    },
+    "androidStatusBar": {
+      "barStyle": "light-content",
+      "backgroundColor": "#121212"
     },
     "ios": {
       "supportsTablet": true,
@@ -25,7 +29,7 @@
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
+        "backgroundColor": "#1A283C"
       },
       "package": "sg.aufgetischt.festival_pos",
       "permissions": [
@@ -50,17 +54,6 @@
       ],
       "expo-localization"
     ],
-    "hooks": {
-      "postPublish": [
-        {
-          "file": "sentry-expo/upload-sourcemaps",
-          "config": {
-            "organization": "festival-pos",
-            "project": "app"
-          }
-        }
-      ]
-    },
     "extra": {
       "eas": {
         "projectId": "7f60a1bf-03cb-45a1-8b66-9acb1db3a305"
