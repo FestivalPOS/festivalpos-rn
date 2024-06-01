@@ -39,7 +39,9 @@
       "finalise": "Finalise",
       "cash": "Cash",
       "enter_amount_recieved": "Enter amount recieved",
-      "calculate_change": "Calculate change"
+      "calculate_change": "Calculate change",
+      "enter_amount": "Enter an amount",
+      "enter_amount_description": "To calculate the change, you must enter an amount."
     },
     "qrscanner": {
       "new_pos_loaded_successful": "New POS loaded successful",
