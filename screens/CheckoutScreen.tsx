@@ -17,6 +17,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { postSale } from '../services/api';
 import { useTranslation } from 'react-i18next';
 import Ionicons from '@expo/vector-icons/Ionicons';
+import Toast from 'react-native-toast-message';
 
 const { width } = Dimensions.get('window');
 
@@ -51,10 +52,23 @@ const CheckoutScreen = ({ route, navigation }) => {
 
   const handleCalculateChange = () => {
     const total = calculateTotal();
-    const changeAmount = parseFloat(givenAmount) - total;
-    setChange(changeAmount.toFixed(2));
+    const amount = parseFloat(givenAmount);
+    console.log(amount);
+    if (amount >= 0) {
+      const changeAmount =  - total;
+      setChange(changeAmount.toFixed(2));
+      setSelectedPayment('Bar');
+    } else {
+      Toast.show({
+        type: 'info',
+        text1: t('screens.checkout.enter_amount'),
+        text2: t('screens.checkout.enter_amount_description'),
+        position: 'bottom',
+        visibilityTime: 2000,
+        bottomOffset: 90,
+      })
+    }
     setIsModalVisible(false);
-    setSelectedPayment('Bar');
   };
 
   const handleFinish = async () => {

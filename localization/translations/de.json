@@ -39,7 +39,9 @@
       "finalise": "Abschliessen",
       "cash": "Bar",
       "enter_amount_recieved": "Erhaltenen Betrag eingeben",
-      "calculate_change": "Wechselgeld berechnen"
+      "calculate_change": "Wechselgeld berechnen",
+      "enter_amount": "Gib einen Betrag ein",
+      "enter_amount_description": "Um das Wechselgeld zu berechnen, musst du einen Betrag eingeben."
     },
     "qrscanner": {
       "new_pos_loaded_successful": "Neuer POS erfolgreich geladen",
