@@ -55,7 +55,7 @@ const CheckoutScreen = ({ route, navigation }) => {
     const amount = parseFloat(givenAmount);
     console.log(amount);
     if (amount >= 0) {
-      const changeAmount =  - total;
+      const changeAmount = amount - total;
       setChange(changeAmount.toFixed(2));
       setSelectedPayment('Bar');
     } else {
@@ -66,7 +66,7 @@ const CheckoutScreen = ({ route, navigation }) => {
         position: 'bottom',
         visibilityTime: 2000,
         bottomOffset: 90,
-      })
+      });
     }
     setIsModalVisible(false);
   };
