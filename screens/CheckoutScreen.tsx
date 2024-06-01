@@ -53,7 +53,6 @@ const CheckoutScreen = ({ route, navigation }) => {
   const handleCalculateChange = () => {
     const total = calculateTotal();
     const amount = parseFloat(givenAmount);
-    console.log(amount);
     if (amount >= 0) {
       const changeAmount = amount - total;
       setChange(changeAmount.toFixed(2));
