@@ -51,7 +51,9 @@ export function BrandedDrawerWithTitle({
 }: React.ComponentProps<typeof BrandedDrawerContent> & { title: string }) {
   return (
     <BrandedDrawerContent {...rest}>
-      <Text style={styles.title}>{title}</Text>
+      <View style={styles.titleBox}>
+        <Text style={styles.title}>{title}</Text>
+      </View>
     </BrandedDrawerContent>
   );
 }
@@ -70,8 +72,14 @@ const styles = StyleSheet.create({
     width: 180,
     height: 180,
   },
+  titleBox: {
+    width: '100%',
+    alignItems: 'center',
+    marginTop: 20,
+  },
   title: {
     fontSize: 18,
     color: Colors.tint,
+    fontWeight: 'bold',
   },
 });

@@ -14,7 +14,9 @@ import QRScannerScreen from '../screens/QRScannerScreen';
 import WelcomeScreen from '../screens/WelcomeScreen';
 import { useTranslation } from 'react-i18next';
 import { getTabBarIcon } from '../helpers/icons';
-import BrandedDrawerContent from './BrandedDrawer.component';
+import BrandedDrawerContent, {
+  BrandedDrawerWithTitle,
+} from './BrandedDrawer.component';
 import { Platform } from 'react-native';
 import { createURL } from 'expo-linking';
 
@@ -33,9 +35,17 @@ const NavigationComponent = () => {
       key={drawerKey}
       screenOptions={{ headerTintColor: '#FFFFFF' }}
       initialRouteName={pos.url ? 'pos' : 'welcome'}
-      drawerContent={(props) => (
-        <BrandedDrawerContent {...props} showLogoutButton={!!pos.url} />
-      )}
+      drawerContent={(props) =>
+        pos.festival ? (
+          <BrandedDrawerWithTitle
+            {...props}
+            showLogoutButton={!!pos.url}
+            title={pos.festival}
+          />
+        ) : (
+          <BrandedDrawerContent {...props} showLogoutButton={!!pos.url} />
+        )
+      }
     >
       {pos.url ? (
         <>

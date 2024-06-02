@@ -4,7 +4,13 @@ import { validatePOSData } from '../validators/POSData.validation';
 import { POSData } from '../types/POSData';
 import { Sale } from '../types/Sale';
 
+const isHTTPS = (url) => url.startsWith('https://');
+
 export const fetchPOS = async (url) => {
+  if (!isHTTPS(url)) {
+    throw new Error('URL must use HTTPS');
+  }
+
   try {
     let response;
     // Fetch data from the network using the saved URL
@@ -41,6 +47,10 @@ export const fetchPOS = async (url) => {
 };
 
 export const postSale = async (saleData: Sale, url: string) => {
+  if (!isHTTPS(url)) {
+    throw new Error('URL must use HTTPS');
+  }
+
   try {
     const response = await fetch(url, {
       method: 'POST',

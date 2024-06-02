@@ -85,21 +85,19 @@ const CheckoutScreen = ({ route, navigation }) => {
       }),
     };
 
+    // Save a sale if configured so
+    if (pos.save_sales) {
+      const postUrl = pos.url.split('/pos')[0] + '/pos/sale';
+      try {
+        await postSale(saleData, postUrl);
+      } catch (error) {
+        console.info('Failed to post sale to API, saving to cache: ', error);
+        addSale(saleData, postUrl);
+      }
+    }
+
     resetCart();
     navigation.navigate('pos');
-
-    const postUrl = pos.url.split('/pos')[0] + '/pos/sale';
-
-    try {
-      await postSale(saleData, postUrl);
-      resetCart();
-      navigation.navigate('pos');
-    } catch (error) {
-      console.info('Failed to post sale to API, saving to cache: ', error);
-      addSale(saleData, postUrl);
-      resetCart();
-      navigation.navigate('pos');
-    }
   };
 
   const total = calculateTotal().toFixed(2);
