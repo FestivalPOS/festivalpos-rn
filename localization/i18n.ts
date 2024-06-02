@@ -1,4 +1,8 @@
-import i18n, { LanguageDetectorAsyncModule } from 'i18next';
+import i18n, {
+  InitOptions,
+  LanguageDetectorAsyncModule,
+  Services,
+} from 'i18next';
 import { initReactI18next } from 'react-i18next';
 import { en, de } from './translations';
 import { getLocales } from 'expo-localization';
@@ -8,7 +12,12 @@ const allTranslations: Record<string, typeof en | typeof de> = { en, de };
 const languageDetector: LanguageDetectorAsyncModule = {
   type: 'languageDetector',
   async: true,
-  detect: async function (callback: (lng: string | readonly string[]) => void) {
+  init: (
+    _services: Services,
+    _detectorOptions: object,
+    _i18nextOptions: InitOptions,
+  ) => {},
+  detect: (callback: (lng: string) => void) => {
     try {
       const language = getLocales()
         .map((locale) => locale.languageTag)
@@ -25,7 +34,6 @@ const languageDetector: LanguageDetectorAsyncModule = {
       callback('de'); // fallback to German in case of error
     }
   },
-  init: () => {},
   cacheUserLanguage: () => {},
 };
 

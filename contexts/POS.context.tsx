@@ -19,6 +19,8 @@ export const POSProvider: React.FC<POSProviderProps> = ({ children }) => {
   const [pos, setPOS] = useState<POSData>({
     id: '',
     name: '',
+    festival: '',
+    save_sales: false,
     url: '',
     products: [],
   });
@@ -56,6 +58,8 @@ export const POSProvider: React.FC<POSProviderProps> = ({ children }) => {
     pos.id = '';
     pos.url = '';
     pos.name = '';
+    pos.festival = '';
+    pos.save_sales = false;
     pos.products = [];
     await AsyncStorage.removeItem('pos');
   };
@@ -72,6 +76,8 @@ export const POSProvider: React.FC<POSProviderProps> = ({ children }) => {
         url: currentPos.url,
         id: fetchedPOS.id,
         name: fetchedPOS.name,
+        festival: fetchedPOS.festival,
+        save_sales: fetchedPOS.save_sales,
         products: fetchedPOS.products,
       });
     } catch (error) {
@@ -104,7 +110,14 @@ export const POSProvider: React.FC<POSProviderProps> = ({ children }) => {
 
   const updateURL = async (newURL: string) => {
     console.log('Update url and refresh');
-    const newPos = { url: newURL, id: '', name: '', products: [] };
+    const newPos = {
+      url: newURL,
+      id: '',
+      name: '',
+      festival: '',
+      save_sales: false,
+      products: [],
+    };
     await savePOS(newPos);
     try {
       await fetchNewPOSData(newPos);

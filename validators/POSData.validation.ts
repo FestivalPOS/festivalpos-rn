@@ -6,8 +6,10 @@ const posDataSchema = {
   type: 'object',
   required: ['id', 'name', 'products'],
   properties: {
-    id: { type: 'string' },
-    name: { type: 'string' },
+    id: { type: 'string', nullable: false },
+    name: { type: 'string', nullable: false },
+    festival: { type: 'string', nullable: true },
+    save_sales: { type: 'boolean', nullable: true },
     products: {
       type: 'array',
       items: {

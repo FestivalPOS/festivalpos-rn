@@ -14,6 +14,11 @@ import { usePOS } from '../contexts/POS.context';
 import { useCart } from '../contexts/Cart.context';
 import { useTranslation } from 'react-i18next';
 import Ionicons from '@expo/vector-icons/Ionicons';
+import Animated, {
+  useAnimatedStyle,
+  useSharedValue,
+  withSpring,
+} from 'react-native-reanimated';
 
 const { width, height } = Dimensions.get('window');
 const maxTileSize = Math.min(width / 4, height / 3, 200);
@@ -23,11 +28,14 @@ const POSScreen = ({ navigation }) => {
   const { cart, setCart } = useCart();
   const { t } = useTranslation();
 
-  useLayoutEffect(() => {
+  const totalTranslateX = useSharedValue(0);
+  const binTranslateX = useSharedValue(-50);
+
+  useEffect(() => {
     navigation.setOptions({
-      title: pos.name ? `POS  -  ${pos.name}` : 'POS',
+      headerTitle: pos.name ? `POS  -  ${pos.name}` : 'POS',
     });
-  }, [pos.name]);
+  }, [pos.name, navigation]);
 
   const addToCart = (product) => {
     setCart((prevCart) => {
@@ -54,6 +62,43 @@ const POSScreen = ({ navigation }) => {
       return sum + (product?.price ?? 0) * cart[productId];
     }, 0);
   };
+
+  const handlePress = () => {
+    if (totalTranslateX.value === 0 && calculateTotal() != 0) {
+      totalTranslateX.value = withSpring(60, {
+        duration: 200,
+        dampingRatio: 1.5,
+      });
+      binTranslateX.value = withSpring(50, {
+        duration: 200,
+        dampingRatio: 1.5,
+      });
+    } else {
+      totalTranslateX.value = withSpring(0, {
+        duration: 200,
+        dampingRatio: 1.5,
+      });
+      binTranslateX.value = withSpring(-40, {
+        duration: 200,
+        dampingRatio: 1.5,
+      });
+    }
+  };
+
+  const clearCartPress = () => {
+    totalTranslateX.value = withSpring(0, { duration: 200, dampingRatio: 1.5 });
+    binTranslateX.value = withSpring(-40, { duration: 200, dampingRatio: 1.5 });
+    setCart({});
+  };
+
+  const animatedStyle = useAnimatedStyle(() => ({
+    transform: [{ translateX: totalTranslateX.value }],
+  }));
+
+  const binStyle = useAnimatedStyle(() => ({
+    transform: [{ translateX: binTranslateX.value }],
+    opacity: totalTranslateX.value > 0 ? 1 : 0,
+  }));
 
   return (
     <View style={styles.container}>
@@ -103,9 +148,23 @@ const POSScreen = ({ navigation }) => {
       )}
 
       <View style={styles.cartSummary}>
-        <Text style={styles.cartTotal}>
-          {t('screens.pos.total')}: CHF {calculateTotal().toFixed(2)}
-        </Text>
+        <View style={styles.cartTotalContainer}>
+          <Animated.View style={[styles.binContainer, binStyle]}>
+            <Pressable onPress={clearCartPress}>
+              <View style={styles.binBackground}>
+                <Ionicons name="trash-outline" size={24} color="white" />
+              </View>
+            </Pressable>
+          </Animated.View>
+
+          <Animated.View style={[animatedStyle]}>
+            <Pressable onPress={handlePress}>
+              <Text style={styles.cartTotal}>
+                {t('screens.pos.total')}: CHF {calculateTotal().toFixed(2)}
+              </Text>
+            </Pressable>
+          </Animated.View>
+        </View>
         <Pressable
           style={
             Object.keys(cart).length === 0
@@ -236,6 +295,22 @@ const styles = StyleSheet.create({
   checkoutIcon: {
     height: 30,
     width: 20,
+  },
+  cartTotalContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  binContainer: {
+    position: 'absolute',
+    left: -50,
+    height: '100%',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  binBackground: {
+    backgroundColor: 'darkred',
+    borderRadius: 12,
+    padding: 8,
   },
 });
 
